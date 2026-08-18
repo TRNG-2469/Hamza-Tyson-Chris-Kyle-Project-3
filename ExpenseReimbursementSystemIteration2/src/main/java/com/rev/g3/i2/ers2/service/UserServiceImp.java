@@ -4,11 +4,15 @@ import com.rev.g3.i2.ers2.model.User;
 import com.rev.g3.i2.ers2.repo.DepartmentDAO;
 import com.rev.g3.i2.ers2.repo.UserDAO;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserServiceImp implements UserService{
     private final UserDAO userDAO;
     private final DepartmentDAO departmentDAO;
 
+    @Autowired
     public UserServiceImp(UserDAO userDAO, DepartmentDAO departmentDAO) {
         this.userDAO = userDAO;
         this.departmentDAO = departmentDAO;
