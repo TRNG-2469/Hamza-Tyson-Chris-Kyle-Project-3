@@ -2,12 +2,16 @@ package com.rev.g3.i2.ers2.service;
 
 import com.rev.g3.i2.ers2.model.Department;
 import com.rev.g3.i2.ers2.repo.DepartmentDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class DepartmentServiceImp implements DepartmentService {
     private final DepartmentDAO departmentDAO;
 
+    @Autowired
     public DepartmentServiceImp(DepartmentDAO departmentDAO) {
         this.departmentDAO = departmentDAO;
     }

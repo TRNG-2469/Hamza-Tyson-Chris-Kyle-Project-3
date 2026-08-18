@@ -4,17 +4,21 @@ import com.rev.g3.i2.ers2.enums.Status;
 import com.rev.g3.i2.ers2.model.Reimbursement;
 import com.rev.g3.i2.ers2.model.User;
 import com.rev.g3.i2.ers2.repo.ReimbursementDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public class ReimbursementServiceImp implements ReimbursementService{
     private final ReimbursementDAO reimbursementDAO;
 
+    @Autowired
     public ReimbursementServiceImp(ReimbursementDAO reimbursementDAO) {
         this.reimbursementDAO = reimbursementDAO;
     }
 
     // Create
-
     @Override
     public Reimbursement createReimbursement(Reimbursement reimbursement, User author) {
         reimbursement.setAuthorId(author.getUserId());
@@ -24,7 +28,6 @@ public class ReimbursementServiceImp implements ReimbursementService{
     }
 
     // Read
-
     @Override
     public List<Reimbursement> queryReimbursements(Status status, Integer departmentId) {
         return reimbursementDAO.queryReimbursements(status, departmentId);
@@ -47,7 +50,6 @@ public class ReimbursementServiceImp implements ReimbursementService{
     }
 
     // Update
-
     @Override
     public Reimbursement updateReimbursement(Reimbursement reimbursement) {
         validation(reimbursement);
