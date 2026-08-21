@@ -5,11 +5,11 @@ import com.rev.g3.i2.ers2.model.Reimbursement;
 import com.rev.g3.i2.ers2.model.User;
 import com.rev.g3.i2.ers2.repo.ReimbursementDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 public class ReimbursementServiceImp implements ReimbursementService{
     private final ReimbursementDAO reimbursementDAO;
 
