@@ -12,7 +12,6 @@ import java.util.Objects;
 @Table(name="Departments")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
