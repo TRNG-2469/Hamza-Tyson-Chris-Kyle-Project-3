@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 public class LoginRequest {
     // request body for POST/login
 
-    //reject null, empt string, and white space
+    //reject null, empty string, and white space
     @NotBlank(message = "Username is required")
     private String username;
     @NotBlank(message = "Password is required")
@@ -27,3 +27,4 @@ public class LoginRequest {
         this.password = password;
     }
 }
+
