@@ -2,116 +2,38 @@ package com.rev.g3.i2.ers2.model;
 
 import com.rev.g3.i2.ers2.enums.Status;
 import com.rev.g3.i2.ers2.enums.Type;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
+@Entity
+@Table(name="Reimbursements")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Reimbursement {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reimbursementId;
+    @Positive(message="Reimbursements cannot be negative.")
+    @Max(value=1000, message="Reimbursement cannot exceed $1000")
     private double amount;
+    @NotBlank(message="Description cannot be blank.")
     private String description;
+    @NotBlank(message="Type cannot be blank.")
     private Type type;
+    @NotBlank(message="Status cannot be blank.")
     private Status status;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="userID", nullable=false)
     private int authorId;
-    private int resolverId;
-
-    private Reimbursement() {}
-
-    public Reimbursement(int reimbursementId, double amount, String description, Type type, Status status,
-                         int authorId, int resolverId) {
-        this.reimbursementId = reimbursementId;
-        this.amount = amount;
-        this.description = description;
-        this.type = type;
-        this.status = status;
-        this.authorId = authorId;
-        this.resolverId = resolverId;
-    }
-
-    public int getReimbursementId() {
-        return reimbursementId;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public int getAuthorId() {
-        return authorId;
-    }
-
-    public int getResolverId() {
-        return resolverId;
-    }
-
-    public void setResolverId(int resolverId) {
-        this.resolverId = resolverId;
-    }
-
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-
-    public void setReimbursementId(int reimbursementId) {
-        this.reimbursementId = reimbursementId;
-    }
-
-    @Override
-    public String toString() {
-        return "Reimbursement{" +
-                "reimbursement_id=" + reimbursementId +
-                ", amount=" + amount +
-                ", description='" + description + '\'' +
-                ", type=" + type +
-                ", status=" + status +
-                ", author_id=" + authorId +
-                ", resolver_id=" + resolverId +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Reimbursement that)) return false;
-        return getReimbursementId() == that.getReimbursementId() &&
-                Double.compare(getAmount(), that.getAmount()) == 0 &&
-                getAuthorId() == that.getAuthorId() &&
-                getResolverId() == that.getResolverId() &&
-                Objects.equals(getDescription(), that.getDescription()) &&
-                getType() == that.getType() &&
-                getStatus() == that.getStatus();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getReimbursementId(), getAmount(), getDescription(),
-                getType(), getStatus(), getAuthorId(), getResolverId());
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="userID", nullable=true)
+    private Integer resolverId;
 }
