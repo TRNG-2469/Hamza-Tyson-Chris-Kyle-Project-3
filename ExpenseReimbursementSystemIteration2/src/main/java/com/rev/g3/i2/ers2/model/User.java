@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Objects;
 
 @Entity
+@Table(name="Users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="role", discriminatorType= DiscriminatorType.STRING)
 @Data
