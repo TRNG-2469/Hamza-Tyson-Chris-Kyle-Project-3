@@ -4,20 +4,20 @@ import com.rev.g3.i2.ers2.enums.Status;
 import com.rev.g3.i2.ers2.model.Reimbursement;
 import com.rev.g3.i2.ers2.model.User;
 import com.rev.g3.i2.ers2.service.ReimbursementService;
-import io.javalin.http.Context;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-public class ReimbursementHandlerImp implements ReimbursementHandler {
+@RestController
+public class ReimbursementHandler {
     private final ReimbursementService reimbursementService;
 
-    public ReimbursementHandlerImp(ReimbursementService reimbursementService) {
+    public ReimbursementHandler(ReimbursementService reimbursementService) {
         this.reimbursementService = reimbursementService;
     }
 
     // Create
-
-    @Override
+    @PostMapping("/reimbursements")
     public void createReimbursement(Context ctx) {
         User author = ctx.sessionAttribute("user");
         Reimbursement reimbursement = ctx.bodyAsClass(Reimbursement.class);
@@ -26,7 +26,6 @@ public class ReimbursementHandlerImp implements ReimbursementHandler {
     }
 
     // Read
-
     @Override
     public void queryReimbursements(Context ctx) {
         Integer departmentId = ctx.queryParam("departmentId") != null ? Integer.valueOf(ctx.queryParam("departmentId")) : null;
@@ -68,7 +67,6 @@ public class ReimbursementHandlerImp implements ReimbursementHandler {
     }
 
     // Update
-
     @Override
     public void updateReimbursement(Context ctx) {
         Reimbursement reimbursement = ctx.bodyAsClass(Reimbursement.class);

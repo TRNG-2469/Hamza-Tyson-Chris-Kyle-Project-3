@@ -4,11 +4,13 @@ import com.rev.g3.i2.ers2.enums.Role;
 import com.rev.g3.i2.ers2.model.User;
 import com.rev.g3.i2.ers2.service.UserService;
 import io.javalin.http.Context;
+import org.springframework.web.bind.annotation.RestController;
 
-public class UserHandlerImp implements UserHandler{
+@RestController
+public class UserHandler {
     private final UserService userService;
 
-    public UserHandlerImp(UserService userService) {
+    public UserHandler(UserService userService) {
         this.userService = userService;
     }
 
