@@ -8,5 +8,10 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:7.0.8" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.18" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-web:7.0.8" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:11.0.22" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-beans:7.0.8" level="project" />
+    <orderEntry type="library" name="Maven: org.mindrot:jbcrypt:0.4" level="project" />
   </component>
 </module>

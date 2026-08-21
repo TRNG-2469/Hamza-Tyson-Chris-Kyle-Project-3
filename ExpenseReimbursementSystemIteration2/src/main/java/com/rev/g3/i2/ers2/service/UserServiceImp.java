@@ -1,5 +1,7 @@
 package com.rev.g3.i2.ers2.service;
 
+import com.rev.g3.i2.ers2.exception.DepartmentNotFoundException;
+import com.rev.g3.i2.ers2.exception.UsernameAlreadyExistsException;
 import com.rev.g3.i2.ers2.model.User;
 import com.rev.g3.i2.ers2.repo.DepartmentDAO;
 import com.rev.g3.i2.ers2.repo.UserDAO;
@@ -52,16 +54,18 @@ public class UserServiceImp implements UserService{
             throw new IllegalArgumentException("User cannot be null.");
         }
         if(searchByUsername(user.getUsername()) != null){
-            throw new IllegalArgumentException("Username already exists.");
+            // change to the custom exception
+            throw new UsernameAlreadyExistsException(user.getUsername());
         }
         if(user.getPassword() == null || user.getPassword().isBlank()){
+            // rest of the IllegalArugment fall back to the GlobalExceptionHandler generic handler.
             throw new IllegalArgumentException("Password cannot be null or blank.");
         }
         if(user.getFirstName() == null || user.getFirstName().isBlank() || user.getLastName() == null || user.getLastName().isBlank()){
             throw new IllegalArgumentException("First or last name cannot be null or blank.");
         }
         if(departmentDAO.queryDepartmentByDepartmentId(user.getDepartmentId()) == null){
-            throw new IllegalArgumentException("Department ID does not exist.");
+            throw new DepartmentNotFoundException(user.getDepartmentId());
         }
         String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hashedPassword);
