@@ -3,6 +3,7 @@ package com.rev.g3.i2.ers2.model;
 import com.rev.g3.i2.ers2.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,5 +31,7 @@ public class User {
     @NotBlank(message="Last name cannot be blank.")
     @Pattern(regexp="^[a-zA-Z]+$", message="Last name cannot include numbers.")
     private String lastName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="departmentId", nullable=false)
     private int departmentId;
 }
