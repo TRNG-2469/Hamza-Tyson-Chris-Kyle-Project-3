@@ -1,11 +1,15 @@
 package com.rev.g3.i2.ers2.repo;
 
 import com.rev.g3.i2.ers2.enums.Status;
+import com.rev.g3.i2.ers2.model.Department;
 import com.rev.g3.i2.ers2.model.Reimbursement;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface ReimbursementDAO {
+@Repository
+public interface ReimbursementDAO  extends JpaRepository<Reimbursement,Integer> {
     // Create
     Reimbursement createReimbursement(Reimbursement reimbursement);
     // Read
