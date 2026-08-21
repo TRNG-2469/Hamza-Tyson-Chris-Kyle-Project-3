@@ -1,42 +1,21 @@
 package com.rev.g3.i2.ers2.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Objects;
 
+@Entity
+@Table(name="Departments")
+@Data
+@NoArgsConstructor
 public class Department {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int departmentId;
+    @NotBlank(message="Department name cannot be blank.")
     private String departmentName;
-
-    private Department() {}
-
-    public Department(int departmentId, String departmentName) {
-        this.departmentId = departmentId;
-        this.departmentName = departmentName;
-    }
-
-    public int getDepartmentId() {
-        return departmentId;
-    }
-
-    public String getDepartmentName() {
-        return departmentName;
-    }
-
-    @Override
-    public String toString() {
-        return "Department{" +
-                "id=" + departmentId +
-                ", name='" + departmentName + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Department that)) return false;
-        return getDepartmentId() == that.getDepartmentId() && Objects.equals(getDepartmentName(), that.getDepartmentName());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getDepartmentId(), getDepartmentName());
-    }
 }
