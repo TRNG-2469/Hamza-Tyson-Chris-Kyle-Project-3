@@ -13,5 +13,12 @@
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:11.0.22" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:7.0.8" level="project" />
     <orderEntry type="library" name="Maven: org.mindrot:jbcrypt:0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-crypto:7.1.0" level="project" />
+    <orderEntry type="library" name="Maven: io.github.cdimascio:java-dotenv:5.2.2" level="project" />
+    <orderEntry type="library" name="Maven: io.jsonwebtoken:jjwt-api:0.12.6" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:7.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:7.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-core:7.0.8" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-config:7.1.0" level="project" />
   </component>
 </module>
