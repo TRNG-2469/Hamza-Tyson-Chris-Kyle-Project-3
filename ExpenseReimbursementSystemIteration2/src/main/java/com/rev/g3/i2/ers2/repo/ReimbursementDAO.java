@@ -1,18 +1,31 @@
 package com.rev.g3.i2.ers2.repo;
 
 import com.rev.g3.i2.ers2.enums.Status;
+import com.rev.g3.i2.ers2.model.Department;
 import com.rev.g3.i2.ers2.model.Reimbursement;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface ReimbursementDAO {
-    // Create
-    Reimbursement createReimbursement(Reimbursement reimbursement);
-    // Read
-    List<Reimbursement> queryReimbursements(Status status, Integer departmentId);
-    List<Reimbursement> queryReimbursementsByAuthorId(int authorId, Status status);
-    Reimbursement queryReimbursementByReimbursementId(int reimbursementId);
-    // Update
-    Reimbursement updateReimbursement(Reimbursement reimbursement);
+@Repository
+public interface ReimbursementDAO  extends JpaRepository<Reimbursement,Integer> {
+    // JpaRepository already gives: findAll(), findById(), save(), deleteById(), existsById()...
+    // Custom filtered reads (optional params) can't be inherited, so they use @Query:
+
+    @Query("SELECT r FROM Reimbursement r WHERE " +
+            "(:status IS NULL OR r.status = :status) AND " +
+            "(:departmentId IS NULL OR r.author.department.departmentId = :departmentId)")
+    List<Reimbursement> queryReimbursements(@Param("status") Status status,
+                                            @Param("departmentId") Integer departmentId);
+
+    @Query("SELECT r FROM Reimbursement r WHERE r.author.userId = :authorId AND " +
+            "(:status IS NULL OR r.status = :status)")
+    List<Reimbursement> queryReimbursementsByAuthorId(@Param("authorId") int authorId,
+                                                      @Param("status") Status status);
+
+
 
 }
