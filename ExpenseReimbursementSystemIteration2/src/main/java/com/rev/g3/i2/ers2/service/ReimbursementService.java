@@ -14,6 +14,6 @@ public interface ReimbursementService {
     List<Reimbursement> queryReimbursementsByAuthorId(int authorId, Status status);
     Reimbursement queryReimbursementByReimbursementId(int reimbursementId);
     // Update
-    Reimbursement updateReimbursement(Reimbursement reimbursement);
+    Reimbursement updateReimbursement(int id, Reimbursement reimbursement);
     Reimbursement resolveReimbursement(int reimbursementId, User manager, Status status);
 }

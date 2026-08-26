@@ -22,7 +22,7 @@ public class Reimbursement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reimbursementId;
     @Positive(message="Reimbursements cannot be negative.")
-    @Max(value=1000, message="Reimbursement cannot exceed $1000")
+    @Max(value=10000, message="Reimbursement cannot exceed $10000")
     private double amount;
     @NotBlank(message="Description cannot be blank.")
     private String description;

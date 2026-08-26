@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DepartmentDAO extends JpaRepository<Department,Integer> {
-    Department queryDepartmentByDepartmentId(int departmentId);
-    List<Department> queryDepartments();
+public interface DepartmentDAO extends JpaRepository<Department, Integer> {
+    Department findByDepartmentId(int departmentId);
 }
