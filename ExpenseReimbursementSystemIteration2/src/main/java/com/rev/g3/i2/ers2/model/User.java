@@ -13,8 +13,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name="Users")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="role", discriminatorType= DiscriminatorType.STRING)
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -32,6 +30,8 @@ public class User {
     @NotBlank(message="Last name cannot be blank.")
     @Pattern(regexp="^[a-zA-Z]+$", message="Last name cannot include numbers.")
     private String lastName;
+    @NotBlank(message="Role cannot be blank.")
+    private Role role;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="departmentId", nullable=false)
     private int departmentId;

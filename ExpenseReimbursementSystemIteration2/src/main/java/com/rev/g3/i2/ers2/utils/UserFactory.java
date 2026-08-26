@@ -1,7 +1,5 @@
 package com.rev.g3.i2.ers2.utils;
 
-import com.rev.g3.i2.ers2.model.Employee;
-import com.rev.g3.i2.ers2.model.Manager;
 import com.rev.g3.i2.ers2.model.User;
 
 public class UserFactory {
