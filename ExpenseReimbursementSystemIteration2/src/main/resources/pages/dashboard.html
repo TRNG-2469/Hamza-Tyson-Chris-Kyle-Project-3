@@ -183,6 +183,20 @@
                 return user.userId;
             }
 
+            async function authFetch(url, options = {}) {
+                // grab whatever token login.html stored
+                const token = localStorage.getItem("token");
+                // merge in the Authorization header without clobbering any headers the caller passed
+                const headers = {...options.headers, Authorization: "Bearer " + token};
+                const response = await fetch(url, {...options, headers});
+                // missing/expired/invalid token — same handling as a manual logout
+                if (response.status === 401) {
+                    localStorage.removeItem("token");
+                    window.location.href = "/";
+                }
+                return response;
+            }
+
             document.getElementById("loadMyReimbursements").addEventListener("click", viewReimbursements);
             document.getElementById("logoutButton").addEventListener("click", logout);
             document.getElementById("loadAllReimbursements").addEventListener("click", viewAllReimbursements);
