@@ -54,21 +54,22 @@ public class ReimbursementServiceImp implements ReimbursementService{
     // Update
     @Override
     @Transactional
-    public Reimbursement updateReimbursement(Reimbursement reimbursement) {
-        validation(reimbursement);
-        if(reimbursement.getReimbursementId() <= 0){
+    public Reimbursement updateReimbursement(int id, Reimbursement reimbursement) {
+        if (id <= 0) {
             throw new IllegalArgumentException("Reimbursement ID cannot be negative or zero.");
-        } else if(reimbursement.getType() == null || reimbursement.getStatus() == null){
+        }
+        validation(reimbursement);
+        if (reimbursement.getType() == null || reimbursement.getStatus() == null) {
             throw new IllegalArgumentException("Type and status cannot be null.");
         }
-        Reimbursement original = queryReimbursementByReimbursementId(reimbursement.getReimbursementId());
-        if(original == null) {
+        Reimbursement original = queryReimbursementByReimbursementId(id);   // was reimbursement.getReimbursementId()
+        if (original == null) {
             throw new IllegalArgumentException("Reimbursement ID not found.");
         }
-        if(original.getStatus() == Status.APPROVED || original.getStatus() == Status.DENIED) {
+        if (original.getStatus() == Status.APPROVED || original.getStatus() == Status.DENIED) {
             throw new IllegalArgumentException("Cannot update a reimbursement that has been approved or denied.");
         }
-        reimbursement.setReimbursementId(original.getReimbursementId());
+        reimbursement.setReimbursementId(id);   // was original.getReimbursementId() — same value, but now id is the source
         return reimbursementDAO.save(reimbursement);
     }
 
