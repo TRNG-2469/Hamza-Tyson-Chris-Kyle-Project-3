@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDAO.searchByUsername(username);
+        User user = userDAO.findByUsername(username);
 
         if (user == null) {
             // only throw in spring security filer chain
