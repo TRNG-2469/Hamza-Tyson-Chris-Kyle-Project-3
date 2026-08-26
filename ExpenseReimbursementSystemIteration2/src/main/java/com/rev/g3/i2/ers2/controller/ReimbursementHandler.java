@@ -5,6 +5,7 @@ import com.rev.g3.i2.ers2.model.Reimbursement;
 import com.rev.g3.i2.ers2.model.User;
 import com.rev.g3.i2.ers2.security.UserPrincipal;
 import com.rev.g3.i2.ers2.service.ReimbursementService;
+import jakarta.validation.Valid;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,11 +23,10 @@ public class ReimbursementHandler {
 
     // Create
     @PostMapping("/reimbursements")
-    public void createReimbursement(Context ctx) {
-        User author = ctx.sessionAttribute("user");
-        Reimbursement reimbursement = ctx.bodyAsClass(Reimbursement.class);
-        reimbursementService.createReimbursement(reimbursement, author);
-        ctx.status(201).result("Reimbursement created successfully.");
+    public ResponseEntity createReimbursement(@AuthenticationPrincipal UserPrincipal user, @Valid @RequestBody Reimbursement reimbursement) {
+        int authorId = user.getUser().getUserId();
+        reimbursementService.createReimbursement(reimbursement, authorId);
+        return ResponseEntity.ok().build();
     }
 
     // Read
@@ -64,23 +64,14 @@ public class ReimbursementHandler {
 
     // Update
     @PatchMapping("/reimbursements/{id}")
-    public void updateReimbursement(Context ctx) {
-        Reimbursement reimbursement = ctx.bodyAsClass(Reimbursement.class);
-        Reimbursement updatedReimbursement = reimbursementService.updateReimbursement(reimbursement);
-        ctx.status(200).json(updatedReimbursement);
+    public ResponseEntity updateReimbursement(@PathVariable int id, @Valid @RequestBody Reimbursement reimbursement) {
+        reimbursementService.updateReimbursement(id, reimbursement);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/manager/reimbursements/{id}")
-    public void resolveReimbursement(Context ctx) {
-        Reimbursement resolution = ctx.bodyAsClass(Reimbursement.class);
-        Status status = resolution.getStatus();
-        int reimbursementId = Integer.parseInt(ctx.pathParam("reimbursementId"));
-        if (status == null) {
-            ctx.status(400).result("Status parameter is required.");
-            return;
-        }
-        User manager = ctx.sessionAttribute("user");
-        Reimbursement updatedReimbursement = reimbursementService.resolveReimbursement(reimbursementId, manager, status);
-        ctx.status(200).json(updatedReimbursement);
+    public ResponseEntity resolveReimbursement(@PathVariable int id, @Valid @RequestBody Reimbursement reimbursement) {
+        reimbursementService.updateReimbursement(id, reimbursement);
+        return ResponseEntity.ok().build();
     }
 }
