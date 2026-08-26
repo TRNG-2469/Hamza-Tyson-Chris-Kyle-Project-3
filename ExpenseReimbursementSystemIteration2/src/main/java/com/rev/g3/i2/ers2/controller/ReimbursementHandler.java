@@ -46,7 +46,9 @@ public class ReimbursementHandler {
         }
     }
 
-    @Override
+
+
+    @GetMapping("/reimbursements/{id}")
     public void queryReimbursementByAuthorId(Context ctx) {
         int authorId = Integer.parseInt(ctx.pathParam("userId"));
         Status status = null;
@@ -67,14 +69,35 @@ public class ReimbursementHandler {
     }
 
     // Update
-    @Override
+    @PatchMapping("/reimbursements/{id}")
     public void updateReimbursement(Context ctx) {
         Reimbursement reimbursement = ctx.bodyAsClass(Reimbursement.class);
         Reimbursement updatedReimbursement = reimbursementService.updateReimbursement(reimbursement);
         ctx.status(200).json(updatedReimbursement);
     }
 
-    @Override
+    // Managerial functions
+    @GetMapping("/manager/reimbursements")
+    public void queryAllReimbursements(Context ctx) {
+        Integer departmentId = ctx.queryParam("departmentId") != null ? Integer.valueOf(ctx.queryParam("departmentId")) : null;
+        Status status = null;
+        if (ctx.queryParam("status") != null) {
+            try {
+                status = Status.valueOf(ctx.queryParam("status").toUpperCase());
+            } catch (IllegalArgumentException e) {
+                ctx.status(400).result("Invalid status: " + ctx.queryParam("status"));
+                return;
+            }
+        }
+        List<Reimbursement> reimbursements = reimbursementService.queryReimbursements(status, departmentId);
+        if (!reimbursements.isEmpty()) {
+            ctx.status(200).json(reimbursements);
+        } else {
+            ctx.status(200).result("No reimbursements found.");
+        }
+    }
+
+    @PatchMapping("/manager/reimbursements/{id}")
     public void resolveReimbursement(Context ctx) {
         Reimbursement resolution = ctx.bodyAsClass(Reimbursement.class);
         Status status = resolution.getStatus();
