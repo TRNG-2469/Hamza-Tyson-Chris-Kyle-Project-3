@@ -79,7 +79,7 @@ public class GlobalExceptionHandler {
 
         return build(HttpStatus.UNAUTHORIZED, "Invalid username or password.", request);
 
-    }
+    } //
 
     private ResponseEntity<ErrorResponse> build(HttpStatus status, String message, HttpServletRequest request) {
         // shared helper so every handler above doesn't repeat this construction logic
