@@ -24,8 +24,8 @@ public class ReimbursementHandler {
     // Create
     @PostMapping("/reimbursements")
     public ResponseEntity createReimbursement(@AuthenticationPrincipal UserPrincipal user, @Valid @RequestBody Reimbursement reimbursement) {
-        int authorId = user.getUser().getUserId();
-        reimbursementService.createReimbursement(reimbursement, authorId);
+        User author = user.getUser();
+        reimbursementService.createReimbursement(reimbursement, author);
         return ResponseEntity.ok().build();
     }
 
@@ -33,7 +33,6 @@ public class ReimbursementHandler {
     @GetMapping("/reimbursements/{id}")
     public ResponseEntity<List<Reimbursement>> queryReimbursementByAuthorId(@PathVariable int id,
                                              @RequestParam(name="status", required=false) String status) {
-
         Status statusEnum = null;
         if (status != null) {
             try {
@@ -49,7 +48,6 @@ public class ReimbursementHandler {
     @GetMapping("/manager/reimbursements")
     public ResponseEntity<List<Reimbursement>> queryReimbursements(@Param("status") String status,
                                                                    @Param("departmentId") Integer departmentId) {
-
         Status statusEnum = null;
         if (status != null) {
             try {
