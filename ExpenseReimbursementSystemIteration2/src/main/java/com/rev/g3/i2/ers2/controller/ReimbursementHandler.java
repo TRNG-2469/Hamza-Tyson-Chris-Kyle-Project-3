@@ -3,7 +3,11 @@ package com.rev.g3.i2.ers2.controller;
 import com.rev.g3.i2.ers2.enums.Status;
 import com.rev.g3.i2.ers2.model.Reimbursement;
 import com.rev.g3.i2.ers2.model.User;
+import com.rev.g3.i2.ers2.security.UserPrincipal;
 import com.rev.g3.i2.ers2.service.ReimbursementService;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,46 +30,36 @@ public class ReimbursementHandler {
     }
 
     // Read
-    @GetMapping("/reimbursements")
-    public void queryReimbursements(Context ctx) {
-        Integer departmentId = ctx.queryParam("departmentId") != null ? Integer.valueOf(ctx.queryParam("departmentId")) : null;
-        Status status = null;
-        if (ctx.queryParam("status") != null) {
+    @GetMapping("/reimbursements/{id}")
+    public ResponseEntity<List<Reimbursement>> queryReimbursementByAuthorId(@PathVariable int id,
+                                             @RequestParam(name="status", required=false) String status) {
+
+        Status statusEnum = null;
+        if (status != null) {
             try {
-                status = Status.valueOf(ctx.queryParam("status").toUpperCase());
+                statusEnum = Status.valueOf(status);
             } catch (IllegalArgumentException e) {
-                ctx.status(400).result("Invalid status: " + ctx.queryParam("status"));
-                return;
+                return ResponseEntity.badRequest().build();
             }
         }
-        List<Reimbursement> reimbursements = reimbursementService.queryReimbursements(status, departmentId);
-        if (!reimbursements.isEmpty()) {
-            ctx.status(200).json(reimbursements);
-        } else {
-            ctx.status(200).result("No reimbursements found.");
-        }
+
+        return ResponseEntity.ok().body(reimbursementService.queryReimbursementsByAuthorId(id, statusEnum));
     }
 
+    @GetMapping("/manager/reimbursements")
+    public ResponseEntity<List<Reimbursement>> queryReimbursements(@Param("status") String status,
+                                                                   @Param("departmentId") Integer departmentId) {
 
-
-    @GetMapping("/reimbursements/{id}")
-    public void queryReimbursementByAuthorId(Context ctx) {
-        int authorId = Integer.parseInt(ctx.pathParam("userId"));
-        Status status = null;
-        if (ctx.queryParam("status") != null) {
+        Status statusEnum = null;
+        if (status != null) {
             try {
-                status = Status.valueOf(ctx.queryParam("status").toUpperCase());
+                statusEnum = Status.valueOf(status);
             } catch (IllegalArgumentException e) {
-                ctx.status(400).result("Invalid status: " + ctx.queryParam("status"));
-                return;
+                return ResponseEntity.badRequest().build();
             }
         }
-        List<Reimbursement> reimbursements = reimbursementService.queryReimbursementsByAuthorId(authorId, status);
-        if (!reimbursements.isEmpty()) {
-            ctx.status(200).json(reimbursements);
-        } else {
-            ctx.status(200).result("No reimbursements found.");
-        }
+
+        return ResponseEntity.ok().body(reimbursementService.queryReimbursements(statusEnum, departmentId));
     }
 
     // Update
@@ -74,27 +68,6 @@ public class ReimbursementHandler {
         Reimbursement reimbursement = ctx.bodyAsClass(Reimbursement.class);
         Reimbursement updatedReimbursement = reimbursementService.updateReimbursement(reimbursement);
         ctx.status(200).json(updatedReimbursement);
-    }
-
-    // Managerial functions
-    @GetMapping("/manager/reimbursements")
-    public void queryAllReimbursements(Context ctx) {
-        Integer departmentId = ctx.queryParam("departmentId") != null ? Integer.valueOf(ctx.queryParam("departmentId")) : null;
-        Status status = null;
-        if (ctx.queryParam("status") != null) {
-            try {
-                status = Status.valueOf(ctx.queryParam("status").toUpperCase());
-            } catch (IllegalArgumentException e) {
-                ctx.status(400).result("Invalid status: " + ctx.queryParam("status"));
-                return;
-            }
-        }
-        List<Reimbursement> reimbursements = reimbursementService.queryReimbursements(status, departmentId);
-        if (!reimbursements.isEmpty()) {
-            ctx.status(200).json(reimbursements);
-        } else {
-            ctx.status(200).result("No reimbursements found.");
-        }
     }
 
     @PatchMapping("/manager/reimbursements/{id}")

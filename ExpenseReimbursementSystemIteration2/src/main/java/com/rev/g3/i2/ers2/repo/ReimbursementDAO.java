@@ -16,14 +16,6 @@ public interface ReimbursementDAO  extends JpaRepository<Reimbursement,Integer> 
     // Custom filtered reads (optional params) can't be inherited, so they use @Query:
 
     @Query("SELECT r FROM Reimbursement r WHERE " +
-            "r.authorId = :authorId AND " +
-            "(:status IS NULL OR r.status = :status) AND " +
-            "(:departmentId IS NULL OR r.author.department.departmentId = :departmentId)")
-    List<Reimbursement> queryEmployeeReimbursements(@Param("authorId") int authorId,
-                                                    @Param("status") Status status,
-                                                    @Param("departmentId") Integer departmentId);
-
-    @Query("SELECT r FROM Reimbursement r WHERE " +
             "(:status IS NULL OR r.status = :status) AND " +
             "(:departmentId IS NULL OR r.author.department.departmentId = :departmentId)")
     List<Reimbursement> queryReimbursements(@Param("status") Status status,

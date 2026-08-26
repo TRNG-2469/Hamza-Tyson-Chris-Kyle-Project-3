@@ -15,8 +15,6 @@ public class UserPrincipal implements UserDetails {
     // constructor injection of user object type User
     public UserPrincipal(User user){
         this.user = user;
-
-
     }
     // provide implementation to the interface method defined in UserDetails
     @Override
