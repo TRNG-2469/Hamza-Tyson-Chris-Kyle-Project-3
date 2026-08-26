@@ -78,7 +78,8 @@
             document.addEventListener("DOMContentLoaded", async () => {
                 const message = document.getElementById("message");
                 try {
-                    const response = await fetch("/user");
+                    // update to have Authorization header
+                    const response = await authFetch("/user");
                     if (!response.ok) {
                         window.location.href = "/";
                         return;
@@ -112,7 +113,8 @@
                     url += "?status=" + status;
                 }
                 try {
-                    const response = await fetch(url);
+
+                    const response = await authFetch(url);
 
                     if (!response.ok) {
                         alert("Unable to load reimbursements.");
@@ -153,7 +155,7 @@
                 if (params.toString()) {
                     url += "?" + params.toString();
                 }
-                const response = await fetch(url);
+                const response = await authFetch(url);
                 if (!response.ok) {
                     alert("Unable to load reimbursements.");
                     return;
@@ -174,7 +176,7 @@
             }
 
             async function getUserId() {
-                const response = await fetch("/user");
+                const response = await authFetch("/user");
                 if (!response.ok) {
                     window.location.href = "/";
                     return null;
