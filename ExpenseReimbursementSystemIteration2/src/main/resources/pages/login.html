@@ -34,13 +34,19 @@
                 const username = document.getElementById("username").value;
                 const password = document.getElementById("password").value;
                 const response = await fetch("/login", {
+                    // send post to /login
                     method: "POST",
+                    // tell spring which HttpMessageConverter to use
                     headers: {"Content-Type": "application/json"},
+                    //js object into wire format
                     body: JSON.stringify({username: username, password: password})
                 });
-                const message = document.getElementById("message");
+                // return responses
                 if (response.ok) {
-                    alert("Login successful! Redirecting to dashboard...");
+                    // save the token so future requests can use it and logout can use it and read token from backend
+                    const auth = await response.json();
+                    // store token in the local storage
+                    localStorage.setItem("token", auth.token);
                     window.location.href = "/dashboard.html";
                 } else {
                     alert("Invalid username or password.");

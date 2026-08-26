@@ -95,13 +95,10 @@
                 }
             });
 
-            async function logout() {
-                const response = await fetch("/logout", {method: "POST"});
-                if (response.ok) {
-                    window.location.href = "/";
-                } else {
-                    alert("Logout failed.");
-                }
+            function logout() {
+                // no server session to invalidate  drop the client's token
+                localStorage.removeItem("token");
+                window.location.href = "/";
             }
 
             async function viewReimbursements() {
