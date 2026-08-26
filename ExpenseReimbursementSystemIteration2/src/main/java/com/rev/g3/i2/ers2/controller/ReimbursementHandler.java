@@ -26,7 +26,7 @@ public class ReimbursementHandler {
     }
 
     // Read
-    @Override
+    @GetMapping("/reimbursements")
     public void queryReimbursements(Context ctx) {
         Integer departmentId = ctx.queryParam("departmentId") != null ? Integer.valueOf(ctx.queryParam("departmentId")) : null;
         Status status = null;
