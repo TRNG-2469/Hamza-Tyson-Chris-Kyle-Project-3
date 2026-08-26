@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+
 
 import java.util.Objects;
 
@@ -15,7 +15,7 @@ import java.util.Objects;
 @Table(name="Users")
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
+
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

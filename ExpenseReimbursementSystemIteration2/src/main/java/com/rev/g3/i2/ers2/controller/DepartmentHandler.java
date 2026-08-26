@@ -17,11 +17,11 @@ public class DepartmentHandler {
 
     @GetMapping("/departments/{id}")
     public ResponseEntity<Department> findDepartmentById(@PathVariable int id) {
-        return ResponseEntity.ok().body(departmentService.findByDepartmentId(id));
+        return ResponseEntity.ok().body(departmentService.queryDepartmentByDepartmentId(id) );
     }
 
     @GetMapping("/departments")
     public ResponseEntity<List<Department>> findAll() {
-        return ResponseEntity.ok().body(departmentService.findAll());
+        return ResponseEntity.ok().body(departmentService.queryDepartments());
     }
 }
