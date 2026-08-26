@@ -199,6 +199,34 @@
                 return response;
             }
 
+            document.getElementById("reimbursementForm").addEventListener("submit", async function(event) {
+                // stop the browser's default full-page-reload form submission
+                event.preventDefault();
+
+                // pull the three values the user typed/selected
+                const reimbursement = {
+                    amount: Number(document.getElementById("amount").value),
+                    description: document.getElementById("description").value,
+                    type: document.getElementById("type").value
+                };
+
+                // send it to the backend, authFetch attaches the bearer token automatically
+                const response = await authFetch("/reimbursements", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(reimbursement)
+                });
+
+                const messageEl = document.getElementById("reimbursementMessage");
+                if (response.ok) {
+                    messageEl.textContent = "Reimbursement submitted.";
+                    // clear the form so it's empty for the next submission
+                    event.target.reset();
+                } else {
+                    messageEl.textContent = "Failed to submit reimbursement.";
+                }
+            });
+
             document.getElementById("loadMyReimbursements").addEventListener("click", viewReimbursements);
             document.getElementById("logoutButton").addEventListener("click", logout);
             document.getElementById("loadAllReimbursements").addEventListener("click", viewAllReimbursements);
