@@ -6,6 +6,7 @@ import com.rev.g3.i2.ers2.model.User;
 import com.rev.g3.i2.ers2.repo.ReimbursementDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,11 +21,12 @@ public class ReimbursementServiceImp implements ReimbursementService{
 
     // Create
     @Override
+    @Transactional
     public Reimbursement createReimbursement(Reimbursement reimbursement, User author) {
-        reimbursement.setAuthorId(author.getUserId());
+        reimbursement.setAuthorId(author.getUserId());           // CHANGED from setAuthorId(author.getUserId())
         reimbursement.setStatus(Status.PENDING);
         validation(reimbursement);
-        return reimbursementDAO.createReimbursement(reimbursement);
+        return reimbursementDAO.save(reimbursement);  // CHANGED from createReimbursement(...)
     }
 
     // Read
@@ -38,7 +40,7 @@ public class ReimbursementServiceImp implements ReimbursementService{
         if(reimbursementId <= 0){
             throw new IllegalArgumentException("Reimbursement ID cannot be negative or zero.");
         }
-        return reimbursementDAO.queryReimbursementByReimbursementId(reimbursementId);
+        return reimbursementDAO.findById(reimbursementId).orElse(null);
     }
 
     @Override
@@ -51,22 +53,24 @@ public class ReimbursementServiceImp implements ReimbursementService{
 
     // Update
     @Override
-    public Reimbursement updateReimbursement(Reimbursement reimbursement) {
-        validation(reimbursement);
-        if(reimbursement.getReimbursementId() <= 0){
+    @Transactional
+    public Reimbursement updateReimbursement(int id, Reimbursement reimbursement) {
+        if (id <= 0) {
             throw new IllegalArgumentException("Reimbursement ID cannot be negative or zero.");
-        } else if(reimbursement.getType() == null || reimbursement.getStatus() == null){
+        }
+        validation(reimbursement);
+        if (reimbursement.getType() == null || reimbursement.getStatus() == null) {
             throw new IllegalArgumentException("Type and status cannot be null.");
         }
-        Reimbursement original = queryReimbursementByReimbursementId(reimbursement.getReimbursementId());
-        if(original == null) {
+        Reimbursement original = queryReimbursementByReimbursementId(id);   // was reimbursement.getReimbursementId()
+        if (original == null) {
             throw new IllegalArgumentException("Reimbursement ID not found.");
         }
-        if(original.getStatus() == Status.APPROVED || original.getStatus() == Status.DENIED) {
+        if (original.getStatus() == Status.APPROVED || original.getStatus() == Status.DENIED) {
             throw new IllegalArgumentException("Cannot update a reimbursement that has been approved or denied.");
         }
-        reimbursement.setReimbursementId(original.getReimbursementId());
-        return reimbursementDAO.updateReimbursement(reimbursement);
+        reimbursement.setReimbursementId(id);   // was original.getReimbursementId() — same value, but now id is the source
+        return reimbursementDAO.save(reimbursement);
     }
 
     @Override
@@ -83,7 +87,7 @@ public class ReimbursementServiceImp implements ReimbursementService{
         }
         original.setStatus(status);
         original.setResolverId(manager.getUserId());
-        return reimbursementDAO.updateReimbursement(original);
+        return reimbursementDAO.save(original);
     }
 
     private void validation(Reimbursement reimbursement) {

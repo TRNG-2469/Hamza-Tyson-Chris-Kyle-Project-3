@@ -25,7 +25,7 @@ public class UserServiceImp implements UserService{
         if(username == null || username.isEmpty()){
             throw new IllegalArgumentException("Username cannot be null or empty.");
         }
-        return userDAO.searchByUsername(username);
+        return userDAO.findByUsername(username);
     }
 
     @Override
@@ -64,15 +64,13 @@ public class UserServiceImp implements UserService{
         if(user.getFirstName() == null || user.getFirstName().isBlank() || user.getLastName() == null || user.getLastName().isBlank()){
             throw new IllegalArgumentException("First or last name cannot be null or blank.");
         }
-        if(departmentDAO.queryDepartmentByDepartmentId(user.getDepartmentId()) == null){
+        if(departmentDAO.findByDepartmentId(user.getDepartmentId()) == null){
             throw new DepartmentNotFoundException(user.getDepartmentId());
         }
         String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hashedPassword);
-        User createdUser = userDAO.register(user);
-        if(createdUser != null) {
-            createdUser.setPassword(null);
-        }
+        User createdUser = userDAO.save(user);
+        createdUser.setPassword(null);
         return createdUser;
     }
 }
