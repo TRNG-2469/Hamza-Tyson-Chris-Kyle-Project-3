@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register User</title>
+    </head>
+
+    <body>
+        <h1>Expense Reimbursement System</h1>
+
+        <h2>Register</h2>
+
+        <form id="registerForm">
+            <div class="form-field">
+                <label for="username">Username: </label>
+                <input id="username" type="text" required>
+            </div>
+            <div class="form-field">
+                <label for="password">Password: </label>
+                <input id="password" type="text" required>
+            </div>
+            <div class="form-field">
+                <label for="first-name">First Name: </label>
+                <input id="first-name" type="text" required>
+            </div>
+            <div class="form-field">
+                <label for="last-name">Last Name: </label>
+                <input id="last-name" type="text" required>
+            </div>
+            <div class="form-field">
+                <label for="role">Roles: </label>
+                <select id="role">
+                    <option value="EMPLOYEE">Employee</option>
+                    <option value="MANAGER">Manager</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label for="departments">Department: </label>
+                <select id="departments">
+                    <option value="">...</option>
+                </select>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <div>
+            <p>Already have an account?</p>
+            <a href="/login.html">Click Here</a>
+        </div>
+    </body>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const dropdown = document.getElementById("departments");
+            fetch("/departments")
+                .then(response => {
+                    if (!response.ok) {throw new Error("Failed to load departments.");}
+                    return response.json();
+                })
+                .then(data => {
+                    dropdown.innerHTML = '<option value="" disabled selected>...</option>';
+                    data.forEach(item => {dropdown.innerHTML += `<option value="${item.departmentId}">${item.departmentId + ". " + item.departmentName}</option>`});
+                })
+                .catch(error => {
+                    console.error("Fetch failed:", error);
+                    dropdown.innerHTML = '<option value="">Failed to load departments.</option>';
+                });
+        });
+        document.getElementById("registerForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const user = {
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value,
+                firstName: document.getElementById("first-name").value,
+                lastName: document.getElementById("last-name").value,
+                role: document.getElementById("role").value,
+                departmentId: Number(document.getElementById("departments").value)
+            };
+            const response = await fetch("/register", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(user)
+            });
+            const message = document.getElementById("message");
+            if (response.ok) {
+                alert("Registration successful! Redirecting to Login page...");
+                window.location.href = "/";
+            } else {
+                alert("Invalid input. Try Again.");
+            }
+        });
+    </script>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Expense Reimbursement System</title>
+    </head>
+
+    <body>
+        <h1>Expense Reimbursement System</h1>
+
+        <h2>Login</h2>
+
+        <form id="loginForm">
+            <div class="form-field">
+                <label for="username">Username :</label>
+                <input type="text" id="username" name="Username" required>
+            </div>
+            <div class="form-field">
+                <label for="password">Password :</label>
+                <input type="password" id="password" name="Password" required>
+            </div>
+            <button type="submit">Log In</button>
+        </form>
+
+        <div>
+            <p>Don't have an account?</p>
+            <a href="/register.html">Click Here</a>
+        </div>
+
+        <script>
+            document.getElementById("loginForm").addEventListener("submit", async function(event) {
+                event.preventDefault();
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+                const response = await fetch("/login", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({username: username, password: password})
+                });
+                const message = document.getElementById("message");
+                if (response.ok) {
+                    alert("Login successful! Redirecting to dashboard...");
+                    window.location.href = "/dashboard.html";
+                } else {
+                    alert("Invalid username or password.");
+                }
+            });
+        </script>
+    </body>
+</html>

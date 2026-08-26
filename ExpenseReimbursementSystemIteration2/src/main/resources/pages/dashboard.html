@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Expense Reimbursement System</title>
+    </head>
+
+    <body>
+        <h1>Expense Reimbursement System</h1>
+
+        <div>
+            <h2>Welcome, <span id="username">User</span>!</h2>
+            <p>Role: <span id="role"></span></p>
+            <button id="logoutButton">Log Out</button>
+        </div>
+
+        <hr>
+
+        <section> <h2>My Reimbursements</h2>
+            <label for="myStatus">Filter by status:</label>
+            <select id="myStatus">
+                <option value="">All</option>
+                <option value="PENDING">Pending</option>
+                <option value="APPROVED">Approved</option>
+                <option value="DENIED">Denied</option>
+            </select>
+            <button id="loadMyReimbursements">View My Reimbursements</button>
+            <div id="myReimbursements"></div>
+        </section>
+
+        <hr>
+
+        <section> <h2>Submit Reimbursement</h2>
+            <form id="reimbursementForm">
+                <div>
+                    <label for="amount">Amount:</label>
+                    <input type="number" id="amount" step="0.01" min="0" required>
+                </div>
+                <div>
+                    <label for="description">Description:</label>
+                    <input type="text" id="description" required>
+                </div>
+                <div>
+                    <label for="type">Type:</label>
+                    <select id="type" required>
+                        <option value="">Select Type</option>
+                        <option value="FOOD">Food</option>
+                        <option value="LODGING">Lodging</option>
+                        <option value="TRAVEL">Travel</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+                <button type="submit">Submit Reimbursement</button>
+            </form>
+            <p id="reimbursementMessage"></p>
+        </section>
+
+        <section id="managerSection" style="display: none;">
+            <hr>
+            <h2>Manager Dashboard</h2>
+            <label for="managerStatus">Filter by status:</label>
+            <select id="managerStatus">
+                <option value="">All</option>
+                <option value="PENDING">Pending</option>
+                <option value="APPROVED">Approved</option>
+                <option value="DENIED">Denied</option>
+            </select>
+            <label for="managerDepartment">Department ID:</label>
+            <input type="number" id="managerDepartment" min="1">
+            <button id="loadAllReimbursements">
+                View Reimbursements
+            </button>
+            <div id="allReimbursements"></div>
+        </section>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", async () => {
+                const message = document.getElementById("message");
+                try {
+                    const response = await fetch("/user");
+                    if (!response.ok) {
+                        window.location.href = "/";
+                        return;
+                    }
+                    const user = await response.json();
+                    document.getElementById("username").textContent = user.username;
+                    document.getElementById("role").textContent = user.role;
+                    if (user.role === "MANAGER") {
+                        document.getElementById("managerSection").style.display = "block";
+                    }
+                } catch (error) {
+                    console.error("Failed to load user:", error);
+                    message.textContent = "Unable to load user information.";
+                }
+            });
+
+            async function logout() {
+                const response = await fetch("/logout", {method: "POST"});
+                if (response.ok) {
+                    window.location.href = "/";
+                } else {
+                    alert("Logout failed.");
+                }
+            }
+
+            async function viewReimbursements() {
+                const userId = await getUserId();
+                if (!userId) {
+                    return;
+                }
+                const status = document.getElementById("myStatus").value;
+                let url = "/reimbursements/" + userId;
+                if (status) {
+                    url += "?status=" + status;
+                }
+                try {
+                    const response = await fetch(url);
+
+                    if (!response.ok) {
+                        alert("Unable to load reimbursements.");
+                        return;
+                    }
+                    const reimbursements = await response.json();
+                    console.log(reimbursements);
+                    const results = document.getElementById("myReimbursements");
+                    results.innerHTML = "";
+                    reimbursements.forEach(reimbursement => {
+                        const item = document.createElement("p");
+                        item.textContent =
+                            "ID: " + reimbursement.reimbursementId +
+                            " | Amount: $" + reimbursement.amount +
+                            " | Description: " + reimbursement.description +
+                            " | Type: " + reimbursement.type +
+                            " | Status: " + reimbursement.status;
+
+                        results.appendChild(item);
+                    });
+                } catch (error) {
+                    console.error("Failed to load reimbursements:", error);
+                    alert("Error loading reimbursements.");
+                }
+            }
+
+            async function viewAllReimbursements() {
+                const status = document.getElementById("managerStatus").value;
+                const departmentId = document.getElementById("managerDepartment").value;
+                let url = "/manager/reimbursements";
+                const params = new URLSearchParams();
+                if (status) {
+                    params.append("status", status);
+                }
+                if (departmentId) {
+                    params.append("departmentId", departmentId);
+                }
+                if (params.toString()) {
+                    url += "?" + params.toString();
+                }
+                const response = await fetch(url);
+                if (!response.ok) {
+                    alert("Unable to load reimbursements.");
+                    return;
+                }
+                const reimbursements = await response.json();
+                const results = document.getElementById("allReimbursements");
+                results.innerHTML = "";
+                reimbursements.forEach(reimbursement => {
+                    const item = document.createElement("p");
+                    item.textContent =
+                        "ID: " + reimbursement.reimbursementId +
+                        " | Amount: $" + reimbursement.amount +
+                        " | Type: " + reimbursement.type +
+                        " | Status: " + reimbursement.status +
+                        " | Author ID: " + reimbursement.authorId;
+                    results.appendChild(item);
+                });
+            }
+
+            async function getUserId() {
+                const response = await fetch("/user");
+                if (!response.ok) {
+                    window.location.href = "/";
+                    return null;
+                }
+                const user = await response.json();
+                return user.userId;
+            }
+
+            document.getElementById("loadMyReimbursements").addEventListener("click", viewReimbursements);
+            document.getElementById("logoutButton").addEventListener("click", logout);
+            document.getElementById("loadAllReimbursements").addEventListener("click", viewAllReimbursements);
+        </script>
+    </body>
+</html>
