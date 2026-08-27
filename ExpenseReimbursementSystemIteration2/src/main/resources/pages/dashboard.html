@@ -180,7 +180,9 @@
                         " | Amount: $" + reimbursement.amount +
                         " | Type: " + reimbursement.type +
                         " | Status: " + reimbursement.status +
-                        " | Author ID: " + reimbursement.authorId;
+                        " | Author ID: " + reimbursement.authorId +
+                        // display a resolver id of manager who approved or denied the reim
+                        " | Resolved by: " + (reimbursement.resolverId || "-");
                     results.appendChild(item);
                     // only pending items can be approved or denied
                     if (reimbursement.status === "PENDING") {
