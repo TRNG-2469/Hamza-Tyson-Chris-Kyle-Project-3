@@ -261,11 +261,14 @@
                 if (description === null) return;
                 const type = prompt("New type (FOOD, LODGING, TRAVEL, OTHER):", reimbursement.type);
                 if (type === null) return;
+                // force intput to be all cap
+                const normalizedType = type.trim().toUpperCase();
+
                 // set a new js object to hold updatd values
                 const updated = {
                     amount: Number(amount),
                     description: description,
-                    type: type,
+                    type: normalizedType, // make sure input is in correct format
                     // required to pass @Valid on the way in  the backend ignores this value
                     status: reimbursement.status
                 };
