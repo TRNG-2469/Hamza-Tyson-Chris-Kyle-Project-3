@@ -2,6 +2,7 @@ package com.rev.g3.i2.ers2.security;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -69,11 +70,14 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        // get the username embedded in the token
-        String username = extractUsername(token);
-        // valid only if it matches the expected user AND isn't expired
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
-
+        try {
+            // parseSignedClaims() throws ExpiredJwtException for an expired token,
+            // SignatureException for a tampered one, MalformedJwtException for garbage.
+            String username = extractUsername(token);
+            return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
 

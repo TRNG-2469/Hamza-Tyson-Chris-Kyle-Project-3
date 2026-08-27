@@ -1,5 +1,6 @@
 package com.rev.g3.i2.ers2.service;
 
+import com.rev.g3.i2.ers2.enums.Role;
 import com.rev.g3.i2.ers2.exception.DepartmentNotFoundException;
 import com.rev.g3.i2.ers2.exception.UsernameAlreadyExistsException;
 import com.rev.g3.i2.ers2.model.User;
@@ -66,6 +67,9 @@ public class UserServiceImp implements UserService{
         }
         if(departmentDAO.findByDepartmentId(user.getDepartmentId()) == null){
             throw new DepartmentNotFoundException(user.getDepartmentId());
+        }
+        if(user.getRole() == null){
+            user.setRole(Role.EMPLOYEE);
         }
         String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hashedPassword);
