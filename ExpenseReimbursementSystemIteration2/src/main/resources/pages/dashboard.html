@@ -285,11 +285,13 @@
             }
 
             async function resolveReimbursement(reimbursement, newStatus) {
-                // echo back the unchanged fields, only status actually changes
+                // js object that hold currrent data i need to send to back end
                 const updated = {
+                    // current reimbsuresment obj
                     amount: reimbursement.amount,
                     description: reimbursement.description,
                     type: reimbursement.type,
+                    // status become new value from manager changing it
                     status: newStatus
                 };
 

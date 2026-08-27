@@ -28,13 +28,17 @@
                 <label for="last-name">Last Name: </label>
                 <input id="last-name" type="text" required>
             </div>
-            <div class="form-field">
-                <label for="role">Roles: </label>
-                <select id="role">
-                    <option value="EMPLOYEE">Employee</option>
-                    <option value="MANAGER">Manager</option>
-                </select>
-            </div>
+
+
+            <!-- might be useful later when implemeneted admin role selection upon registering  -->
+            <!--    <div class="form-field">-->
+<!--                <label for="role">Roles: </label>-->
+<!--                <select id="role">-->
+<!--                    <option value="EMPLOYEE">Employee</option>-->
+<!--                    <option value="MANAGER">Manager</option>-->
+<!--                </select>-->
+<!--            </div>-->
+
             <div class="form-field">
                 <label for="departments">Department: </label>
                 <select id="departments">
@@ -73,7 +77,8 @@
                 password: document.getElementById("password").value,
                 firstName: document.getElementById("first-name").value,
                 lastName: document.getElementById("last-name").value,
-                role: document.getElementById("role").value,
+                // default to EMP when user register
+                role: "EMPLOYEE",
                 departmentId: Number(document.getElementById("departments").value)
             };
             const response = await fetch("/register", {
