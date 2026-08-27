@@ -17,7 +17,7 @@ public class DepartmentHandler {
 
     @GetMapping("/departments/{id}")
     public ResponseEntity<Department> findDepartmentById(@PathVariable int id) {
-        return ResponseEntity.ok().body(departmentService.queryDepartmentByDepartmentId(id) );
+        return ResponseEntity.ok().body(departmentService.findByDepartmentId(id));
     }
 
     @GetMapping("/departments")
