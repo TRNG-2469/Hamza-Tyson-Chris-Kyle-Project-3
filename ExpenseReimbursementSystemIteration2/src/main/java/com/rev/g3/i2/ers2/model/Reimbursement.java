@@ -5,6 +5,7 @@ import com.rev.g3.i2.ers2.enums.Type;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,9 +27,10 @@ public class Reimbursement {
     private double amount;
     @NotBlank(message="Description cannot be blank.")
     private String description;
-    @NotBlank(message="Type cannot be blank.")
+    // NotBlank cannot be use with a type of enum
+    @NotNull (message="Type cannot be blank.")
     private Type type;
-    @NotBlank(message="Status cannot be blank.")
+    @NotNull (message="Status cannot be blank.")
     private Status status;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userID", nullable=false)
