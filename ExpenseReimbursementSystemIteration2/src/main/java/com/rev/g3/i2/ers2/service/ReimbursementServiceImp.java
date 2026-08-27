@@ -24,7 +24,7 @@ public class ReimbursementServiceImp implements ReimbursementService{
     @Transactional
     public Reimbursement createReimbursement(Reimbursement reimbursement, User author) {
         reimbursement.setAuthorId(author.getUserId());           // CHANGED from setAuthorId(author.getUserId())
-        reimbursement.setStatus(Status.PENDING);
+        reimbursement.setStatus(Status.PENDING); // force client to send status
         validation(reimbursement);
         return reimbursementDAO.save(reimbursement);  // CHANGED from createReimbursement(...)
     }

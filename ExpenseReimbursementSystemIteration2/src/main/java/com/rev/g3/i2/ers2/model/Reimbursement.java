@@ -17,7 +17,7 @@ import java.util.Objects;
 @Table(name="Reimbursements")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+
 public class Reimbursement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
