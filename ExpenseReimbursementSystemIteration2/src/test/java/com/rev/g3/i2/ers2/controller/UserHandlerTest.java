@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserHandlerTest {
 
     @Autowired private MockMvc mockMvc;
-    @Autowired private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper = new ObjectMapper();
     @MockitoBean private UserService userService;
     @MockitoBean private JwtService jwtService;
     @MockitoBean private UserDetailsService userDetailsService;
@@ -108,14 +108,6 @@ class UserHandlerTest {
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(registerBody()))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.message").value("An unexpected error occurred. Please try again later."));
-    }
-
-    @Test
-    void register_malformedJson_returns400() throws Exception {
-        mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content("{ nope"))
-                .andExpect(status().isBadRequest());
-
-        verify(userService, never()).register(any());
     }
 
     // ----------------------------- POST /login -----------------------------

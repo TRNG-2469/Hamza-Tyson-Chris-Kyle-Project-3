@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ReimbursementHandlerTest {
 
     @Autowired private MockMvc mockMvc;
-    @Autowired private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper = new ObjectMapper();
     @MockitoBean private ReimbursementService reimbursementService;
     @MockitoBean private JwtService jwtService;
     @MockitoBean private UserDetailsService userDetailsService;
@@ -79,7 +79,7 @@ class ReimbursementHandlerTest {
 
         mockMvc.perform(post("/reimbursements").with(user(employee(5)))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json(Map.of("amount", 100.0, "description", "Taxi", "type", "TRAVEL"))))
+                        .content(json(Map.of("amount", 100.0, "status", "PENDING","description", "Taxi", "type", "TRAVEL"))))
                 .andExpect(status().isOk());
 
         verify(reimbursementService).createReimbursement(any(Reimbursement.class), argThat(u -> u.getUserId() == 5));
@@ -92,7 +92,7 @@ class ReimbursementHandlerTest {
 
         mockMvc.perform(post("/reimbursements").with(user(employee(5)))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json(Map.of("amount", 20.0, "description", "Lunch", "type", "FOOD"))))
+                        .content(json(Map.of("amount", 20.0, "status","PENDING","description", "Lunch", "type", "FOOD"))))
                 .andExpect(status().isOk());
     }
 
@@ -228,7 +228,7 @@ class ReimbursementHandlerTest {
 
         mockMvc.perform(patch("/reimbursements/10").with(user(employee(5)))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json(Map.of("amount", 300.0, "description", "Hotel", "type", "LODGING"))))
+                        .content(json(Map.of("amount", 300.0, "status", "PENDING","description", "Hotel", "type", "LODGING"))))
                 .andExpect(status().isOk());
 
         verify(reimbursementService).updateReimbursement(eq(10), argThat(r -> r.getAmount() == 300.0));
@@ -253,7 +253,7 @@ class ReimbursementHandlerTest {
 
         mockMvc.perform(patch("/manager/reimbursements/10").with(user(manager(9)))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json(Map.of("status", "APPROVED"))))
+                        .content(json(Map.of("description", "Awawa", "type", "OTHER","amount", 50.0,"status", "APPROVED"))))
                 .andExpect(status().isOk());
 
         verify(reimbursementService).resolveReimbursement(eq(10), argThat(m -> m.getUserId() == 9), eq(Status.APPROVED));
