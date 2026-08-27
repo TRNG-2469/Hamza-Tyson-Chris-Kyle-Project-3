@@ -31,10 +31,9 @@ public class User {
     @NotBlank(message="Last name cannot be blank.")
     @Pattern(regexp="^[a-zA-Z]+$", message="Last name cannot include numbers.")
     private String lastName;
-    //NotBlank cannot be use with enum type
-    @NotNull(message="Role cannot be blank.")
+    @NotNull(message="Role cannot be null.")
+    @Enumerated(EnumType.STRING)
     private Role role;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="departmentId", nullable=false)
+    @Column(name="departmentId", nullable=false)
     private int departmentId;
 }

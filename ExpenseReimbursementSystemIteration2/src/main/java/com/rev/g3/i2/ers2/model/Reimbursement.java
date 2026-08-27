@@ -27,15 +27,14 @@ public class Reimbursement {
     private double amount;
     @NotBlank(message="Description cannot be blank.")
     private String description;
-    // NotBlank cannot be use with a type of enum
-    @NotNull (message="Type cannot be blank.")
+    @NotNull(message="Type cannot be null.")
+    @Enumerated(EnumType.STRING)
     private Type type;
-    @NotNull (message="Status cannot be blank.")
+    @NotNull(message="Status cannot be null.")
+    @Enumerated(EnumType.STRING)
     private Status status;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="userID", nullable=false)
+    @Column(name="authorId", nullable=false)
     private int authorId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="userID", nullable=true)
+    @Column(name="resolverId")
     private Integer resolverId;
 }
