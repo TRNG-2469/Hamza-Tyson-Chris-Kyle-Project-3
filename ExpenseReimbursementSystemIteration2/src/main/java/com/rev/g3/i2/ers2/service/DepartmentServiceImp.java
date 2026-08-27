@@ -17,7 +17,7 @@ public class DepartmentServiceImp implements DepartmentService {
     }
 
     @Override
-    public Department queryDepartmentByDepartmentId(int departmentId) {
+    public Department findByDepartmentId(int departmentId) {
         if(departmentId <= 0){
             throw new IllegalArgumentException("Department ID cannot be negative or zero.");
         }
