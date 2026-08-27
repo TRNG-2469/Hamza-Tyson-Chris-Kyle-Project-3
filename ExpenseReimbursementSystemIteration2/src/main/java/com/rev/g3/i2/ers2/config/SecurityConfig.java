@@ -42,9 +42,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // register and login are reachable with no token needed
                         .requestMatchers("/register", "/login").permitAll()
-
-                                .anyRequest().authenticated()
-
+                        // the register page needs the department list before the user has a token
+                        .requestMatchers("/departments", "/departments/*").permitAll()
+                        // approve/deny and the all-reimbursements view are manager-only
+                        .requestMatchers("/manager/**").hasRole("MANAGER")
+                        .anyRequest().authenticated()
                 )
                 // our JWT check before Spring's default filter, so it can populate the SecurityContext first
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
