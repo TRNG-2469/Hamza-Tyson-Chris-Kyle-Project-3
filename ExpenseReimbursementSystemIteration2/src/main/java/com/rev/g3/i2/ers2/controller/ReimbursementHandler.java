@@ -67,9 +67,21 @@ public class ReimbursementHandler {
         return ResponseEntity.ok().build();
     }
 
+// resolve method should not called update method instead call the resolveReimbuesment we defiend in the servicce
+//    @PatchMapping("/manager/reimbursements/{id}")
+//    public ResponseEntity resolveReimbursement(@PathVariable int id, @Valid @RequestBody Reimbursement reimbursement) {
+//        reimbursementService.updateReimbursement(id, reimbursement);
+//        return ResponseEntity.ok().build();
+//    }
+
+
+    // use the authenthication to check only manager  can perform resolve reimbursement
     @PatchMapping("/manager/reimbursements/{id}")
-    public ResponseEntity resolveReimbursement(@PathVariable int id, @Valid @RequestBody Reimbursement reimbursement) {
-        reimbursementService.updateReimbursement(id, reimbursement);
+    public ResponseEntity resolveReimbursement(@AuthenticationPrincipal UserPrincipal user, @PathVariable int id, @Valid @RequestBody Reimbursement reimbursement) {
+        // ger current authenthicated manager from User
+        User manager = user.getUser();
+        // call the correct method, resolving using id, manager, and the current status.
+        reimbursementService.resolveReimbursement(id, manager, reimbursement.getStatus());
         return ResponseEntity.ok().build();
     }
 }

@@ -51,26 +51,53 @@ public class ReimbursementServiceImp implements ReimbursementService{
         return reimbursementDAO.queryReimbursementsByAuthorId(authorId, status);
     }
 
-    // Update
+//    // Update
+//    @Override
+//    @Transactional
+//    public Reimbursement updateReimbursement(int id, Reimbursement reimbursement) {
+//        if (id <= 0) {
+//            throw new IllegalArgumentException("Reimbursement ID cannot be negative or zero.");
+//        }
+//        validation(reimbursement);
+//        if (reimbursement.getType() == null || reimbursement.getStatus() == null) {
+//            throw new IllegalArgumentException("Type and status cannot be null.");
+//        }
+//        Reimbursement original = queryReimbursementByReimbursementId(id);   // was reimbursement.getReimbursementId()
+//        if (original == null) {
+//            throw new IllegalArgumentException("Reimbursement ID not found.");
+//        }
+//        if (original.getStatus() == Status.APPROVED || original.getStatus() == Status.DENIED) {
+//            throw new IllegalArgumentException("Cannot update a reimbursement that has been approved or denied.");
+//        }
+//        reimbursement.setReimbursementId(id);   // was original.getReimbursementId() — same value, but now id is the source
+//        return reimbursementDAO.save(reimbursement);
+//    }
+
+
     @Override
     @Transactional
     public Reimbursement updateReimbursement(int id, Reimbursement reimbursement) {
         if (id <= 0) {
             throw new IllegalArgumentException("Reimbursement ID cannot be negative or zero.");
         }
-        validation(reimbursement);
-        if (reimbursement.getType() == null || reimbursement.getStatus() == null) {
-            throw new IllegalArgumentException("Type and status cannot be null.");
-        }
-        Reimbursement original = queryReimbursementByReimbursementId(id);   // was reimbursement.getReimbursementId()
+        // get exisitng reimbursment from db not trusting the cleint objects
+        Reimbursement original = queryReimbursementByReimbursementId(id);
+        // if no reimburesment is found at that id, cank the operation
         if (original == null) {
             throw new IllegalArgumentException("Reimbursement ID not found.");
         }
         if (original.getStatus() == Status.APPROVED || original.getStatus() == Status.DENIED) {
             throw new IllegalArgumentException("Cannot update a reimbursement that has been approved or denied.");
         }
-        reimbursement.setReimbursementId(id);   // was original.getReimbursementId() — same value, but now id is the source
-        return reimbursementDAO.save(reimbursement);
+
+        // flexible update
+        // update the current amount, description, type in db with new values, keep the rest
+        original.setAmount(reimbursement.getAmount());
+        original.setDescription(reimbursement.getDescription());
+        original.setType(reimbursement.getType());
+        validation(original);
+        // save the updated existing reimbursment back into db
+        return reimbursementDAO.save(original);
     }
 
     @Override
