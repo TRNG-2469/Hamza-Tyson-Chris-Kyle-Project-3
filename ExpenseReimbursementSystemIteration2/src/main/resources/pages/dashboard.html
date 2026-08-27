@@ -66,8 +66,10 @@
                 <option value="APPROVED">Approved</option>
                 <option value="DENIED">Denied</option>
             </select>
-            <label for="managerDepartment">Department ID:</label>
-            <input type="number" id="managerDepartment" min="1">
+            <label for="managerDepartment">Department:</label>
+            <select id="managerDepartment">
+                <option value="">All</option>
+            </select>
             <button id="loadAllReimbursements">
                 View Reimbursements
             </button>
@@ -89,6 +91,7 @@
                     document.getElementById("role").textContent = user.role;
                     if (user.role === "MANAGER") {
                         document.getElementById("managerSection").style.display = "block";
+                        loadManagerDepartments();
                     }
                 } catch (error) {
                     console.error("Failed to load user:", error);
@@ -177,7 +180,9 @@
                         " | Amount: $" + reimbursement.amount +
                         " | Type: " + reimbursement.type +
                         " | Status: " + reimbursement.status +
-                        " | Author ID: " + reimbursement.authorId;
+                        " | Author ID: " + reimbursement.authorId +
+                        // display a resolver id of manager who approved or denied the reim
+                        " | Resolved by: " + (reimbursement.resolverId || "-");
                     results.appendChild(item);
                     // only pending items can be approved or denied
                     if (reimbursement.status === "PENDING") {
@@ -197,6 +202,26 @@
                 });
 
 
+
+            }
+
+            async function loadManagerDepartments() {
+                const dropdown = document.getElementById("managerDepartment");
+                try {
+                    const response = await authFetch("/departments");
+                    if (!response.ok) {
+                        return;
+                    }
+                    const departments = await response.json();
+                    departments.forEach(dept => {
+                        const option = document.createElement("option");
+                        option.value = dept.departmentId;
+                        option.textContent = dept.departmentName;
+                        dropdown.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error("Failed to load departments:", error);
+                }
             }
 
             async function getUserId() {
@@ -261,11 +286,14 @@
                 if (description === null) return;
                 const type = prompt("New type (FOOD, LODGING, TRAVEL, OTHER):", reimbursement.type);
                 if (type === null) return;
+                // force intput to be all cap
+                const normalizedType = type.trim().toUpperCase();
+
                 // set a new js object to hold updatd values
                 const updated = {
                     amount: Number(amount),
                     description: description,
-                    type: type,
+                    type: normalizedType, // make sure input is in correct format
                     // required to pass @Valid on the way in  the backend ignores this value
                     status: reimbursement.status
                 };
@@ -312,6 +340,10 @@
                     alert("Failed to update reimbursement.");
                 }
             }
+
+
+
+
 
 
 
