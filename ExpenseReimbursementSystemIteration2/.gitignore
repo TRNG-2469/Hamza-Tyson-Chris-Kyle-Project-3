@@ -34,4 +34,6 @@ build/
 .env
 
 ### ignore application properties ###
+
+
 application.properties
