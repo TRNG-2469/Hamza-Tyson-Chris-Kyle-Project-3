@@ -179,7 +179,24 @@
                         " | Status: " + reimbursement.status +
                         " | Author ID: " + reimbursement.authorId;
                     results.appendChild(item);
+                    // only pending items can be approved or denied
+                    if (reimbursement.status === "PENDING") {
+
+                        const approveButton = document.createElement("button");
+                        approveButton.textContent = "Approve";
+                        // click calls resolveReimbursement with this item and the target status
+                        approveButton.addEventListener("click", () => resolveReimbursement(reimbursement, "APPROVED"));
+                        results.appendChild(approveButton);
+
+                        const denyButton = document.createElement("button");
+                        denyButton.textContent = "Deny";
+                        denyButton.addEventListener("click", () => resolveReimbursement(reimbursement, "DENIED"));
+                        results.appendChild(denyButton);
+                    }
+
                 });
+
+
             }
 
             async function getUserId() {
@@ -262,6 +279,31 @@
                     alert("Reimbursement updated.");
 
                     viewReimbursements();
+                } else {
+                    alert("Failed to update reimbursement.");
+                }
+            }
+
+            async function resolveReimbursement(reimbursement, newStatus) {
+                // echo back the unchanged fields, only status actually changes
+                const updated = {
+                    amount: reimbursement.amount,
+                    description: reimbursement.description,
+                    type: reimbursement.type,
+                    status: newStatus
+                };
+
+                // manager endpoint using authFetch to attaches the bearer token to know this is manager
+                const response = await authFetch("/manager/reimbursements/" + reimbursement.reimbursementId, {
+                    method: "PATCH",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(updated)
+                });
+
+                if (response.ok) {
+                    alert("Reimbursement " + newStatus.toLowerCase() + ".");
+                    // refresh the list so the resolved item drops out of the pending view
+                    viewAllReimbursements();
                 } else {
                     alert("Failed to update reimbursement.");
                 }
