@@ -82,7 +82,7 @@ public class ReimbursementServiceImp implements ReimbursementService{
         }
         // get exisitng reimbursment from db not trusting the cleint objects
         Reimbursement original = queryReimbursementByReimbursementId(id);
-        // if no reimburesment is found at that id, cank the operation
+        // if no reimburesment is found at that id, cancel the operation
         if (original == null) {
             throw new IllegalArgumentException("Reimbursement ID not found.");
         }

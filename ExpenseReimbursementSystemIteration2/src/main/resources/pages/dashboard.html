@@ -134,6 +134,13 @@
                             " | Status: " + reimbursement.status;
 
                         results.appendChild(item);
+                        // only allow ediiting ui for reimburesmenet that is pending by default.
+                        if (reimbursement.status === "PENDING") {
+                            const editButton = document.createElement("button");
+                            editButton.textContent = "Edit";
+                            editButton.addEventListener("click", () => editReimbursement(reimbursement));
+                            results.appendChild(editButton);
+                        }
                     });
                 } catch (error) {
                     console.error("Failed to load reimbursements:", error);
@@ -226,6 +233,41 @@
                     messageEl.textContent = "Failed to submit reimbursement.";
                 }
             });
+
+            async function editReimbursement(reimbursement) {
+                // users for inputs to update reimburesment
+                const amount = prompt("New amount:", reimbursement.amount);
+                if (amount === null) return;
+                const description = prompt("New description:", reimbursement.description);
+                if (description === null) return;
+                const type = prompt("New type (FOOD, LODGING, TRAVEL, OTHER):", reimbursement.type);
+                if (type === null) return;
+                // set a new js object to hold updatd values
+                const updated = {
+                    amount: Number(amount),
+                    description: description,
+                    type: type,
+                    // required to pass @Valid on the way in  the backend ignores this value
+                    status: reimbursement.status
+                };
+
+                // send the patch request to the backend
+                const response = await authFetch("/reimbursements/" + reimbursement.reimbursementId, {
+                    method: "PATCH",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(updated)
+                });
+                // return a backend status on success or not
+                if (response.ok) {
+                    alert("Reimbursement updated.");
+
+                    viewReimbursements();
+                } else {
+                    alert("Failed to update reimbursement.");
+                }
+            }
+
+
 
             document.getElementById("loadMyReimbursements").addEventListener("click", viewReimbursements);
             document.getElementById("logoutButton").addEventListener("click", logout);
