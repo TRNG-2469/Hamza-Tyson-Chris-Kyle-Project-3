@@ -42,11 +42,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // register and login are reachable with no token needed
                         .requestMatchers("/register", "/login").permitAll()
-                        // the register page needs the department list before the user has a token
                         .requestMatchers("/departments", "/departments/*").permitAll()
+
                         // let these html come through pleaseeee
-                        .requestMatchers("/*.html").permitAll()
+                                .requestMatchers("/", "/*.html").permitAll()
                         // approve/deny and the all-reimbursements view are manager-only
+
                         .requestMatchers("/manager/**").hasRole("MANAGER")
                         .anyRequest().authenticated()
                 )
