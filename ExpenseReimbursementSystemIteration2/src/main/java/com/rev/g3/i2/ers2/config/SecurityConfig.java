@@ -41,10 +41,9 @@ public class SecurityConfig {
                 //  regsiter and lgoin are reachable with no token at all
                 .authorizeHttpRequests(auth -> auth
                         // register and login are reachable with no token needed
+                        .requestMatchers("/", "/index.html", "/register.html", "/dashboard.html").permitAll()
                         .requestMatchers("/register", "/login").permitAll()
-                        // the register page needs the department list before the user has a token
                         .requestMatchers("/departments", "/departments/*").permitAll()
-                        // approve/deny and the all-reimbursements view are manager-only
                         .requestMatchers("/manager/**").hasRole("MANAGER")
                         .anyRequest().authenticated()
                 )
