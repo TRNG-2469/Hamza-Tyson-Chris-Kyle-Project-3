@@ -40,8 +40,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 //  regsiter and lgoin are reachable with no token at all
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/api/register", "/api/login").permitAll()
-                        // but everything else requires a valid, authenticated request
+                        // register and login are reachable with no token needed
+                        .requestMatchers("/register", "/login").permitAll()
+
                                 .anyRequest().authenticated()
 
                 )

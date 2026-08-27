@@ -1,18 +1,31 @@
 package com.rev.g3.i2.ers2.controller;
 
-import com.rev.g3.i2.ers2.enums.Role;
+import com.rev.g3.i2.ers2.dto.AuthResponse;
+import com.rev.g3.i2.ers2.dto.LoginRequest;
+import com.rev.g3.i2.ers2.dto.UserResponse;
 import com.rev.g3.i2.ers2.model.User;
+import com.rev.g3.i2.ers2.security.JwtService;
+import com.rev.g3.i2.ers2.security.UserPrincipal;
 import com.rev.g3.i2.ers2.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserHandler {
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
-    public UserHandler(UserService userService) {
+    public UserHandler(UserService userService, AuthenticationManager authenticationManager, JwtService jwtService)
+    {
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
@@ -20,4 +33,29 @@ public class UserHandler {
         userService.register(user);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+        // checks the password against CustomUserDetailsService + PasswordEncoder and throws BadCredentialsException if wrong
+        Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+        );
+        // the authenticated user pulled back out of the Authentication result
+        UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+        // sign a fresh token for this login
+        String token = jwtService.generateToken(principal);
+        AuthResponse response = new AuthResponse(token, principal.getUsername(), principal.getUser().getRole());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<UserResponse> getCurrentUser(@AuthenticationPrincipal UserPrincipal principal) {
+        // JwtAuthFilter already verified the token and loaded this user before this method ever runs
+        User user = principal.getUser();
+        UserResponse response = new UserResponse(user.getUserId(), user.getUsername(), user.getRole());
+        return ResponseEntity.ok(response);
+    }
 }
+
+
+
