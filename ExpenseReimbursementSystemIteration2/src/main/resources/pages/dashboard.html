@@ -231,7 +231,9 @@
                 const reimbursement = {
                     amount: Number(document.getElementById("amount").value),
                     description: document.getElementById("description").value,
-                    type: document.getElementById("type").value
+                    type: document.getElementById("type").value,
+                    // need this to satisfied @valid b/c reimbursment need status
+                    status: "PENDING"
                 };
 
                 // send it to the backend, authFetch attaches the bearer token automatically
