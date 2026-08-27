@@ -23,10 +23,10 @@ public class ReimbursementServiceImp implements ReimbursementService{
     @Override
     @Transactional
     public Reimbursement createReimbursement(Reimbursement reimbursement, User author) {
-        reimbursement.setAuthorId(author.getUserId());           // CHANGED from setAuthorId(author.getUserId())
+        reimbursement.setAuthorId(author.getUserId());
         reimbursement.setStatus(Status.PENDING);
         validation(reimbursement);
-        return reimbursementDAO.save(reimbursement);  // CHANGED from createReimbursement(...)
+        return reimbursementDAO.save(reimbursement);
     }
 
     // Read
@@ -74,6 +74,7 @@ public class ReimbursementServiceImp implements ReimbursementService{
     }
 
     @Override
+    @Transactional
     public Reimbursement resolveReimbursement(int reimbursementId, User manager, Status status) {
         if(status == Status.PENDING) {
             throw new IllegalArgumentException("Cannot set status to PENDING when resolving a reimbursement.");

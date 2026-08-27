@@ -1,5 +1,6 @@
 package com.rev.g3.i2.ers2.security;
 
+import com.rev.g3.i2.ers2.enums.Role;
 import com.rev.g3.i2.ers2.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,7 +21,8 @@ public class UserPrincipal implements UserDetails {
     @Override
     // get user role enum, turn to string, by naming convention ROLE_ + the role i am getting
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        Role role = user.getRole() == null ? Role.EMPLOYEE : user.getRole();
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
     @Override
     public String getPassword() {

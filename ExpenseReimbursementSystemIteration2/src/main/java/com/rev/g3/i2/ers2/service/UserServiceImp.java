@@ -1,5 +1,6 @@
 package com.rev.g3.i2.ers2.service;
 
+import com.rev.g3.i2.ers2.enums.Role;
 import com.rev.g3.i2.ers2.exception.DepartmentNotFoundException;
 import com.rev.g3.i2.ers2.exception.UsernameAlreadyExistsException;
 import com.rev.g3.i2.ers2.model.User;
@@ -42,8 +43,7 @@ public class UserServiceImp implements UserService{
             return null;
         }
         if(BCrypt.checkpw(password, storedPassword)) {
-            user.setPassword(null);
-            return user;
+            return withoutPassword(user);
         }
         return null;
     }
@@ -67,10 +67,25 @@ public class UserServiceImp implements UserService{
         if(departmentDAO.findByDepartmentId(user.getDepartmentId()) == null){
             throw new DepartmentNotFoundException(user.getDepartmentId());
         }
+        if (user.getRole() == null) {
+            user.setRole(Role.EMPLOYEE); // new accounts default to employee
+        }
         String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hashedPassword);
         User createdUser = userDAO.save(user);
-        createdUser.setPassword(null);
-        return createdUser;
+        return withoutPassword(createdUser);
+    }
+
+    /** Copy of the user with the password removed, so the JPA-managed entity is never mutated. */
+    private static User withoutPassword(User source) {
+        User copy = new User();
+        copy.setUserId(source.getUserId());
+        copy.setUsername(source.getUsername());
+        copy.setPassword(null);
+        copy.setFirstName(source.getFirstName());
+        copy.setLastName(source.getLastName());
+        copy.setRole(source.getRole());
+        copy.setDepartmentId(source.getDepartmentId());
+        return copy;
     }
 }

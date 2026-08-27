@@ -22,6 +22,6 @@ public class DepartmentHandler {
 
     @GetMapping("/departments")
     public ResponseEntity<List<Department>> findAll() {
-        return ResponseEntity.ok().body(departmentService.findAll());
+        return ResponseEntity.ok().body(departmentService.queryDepartments());
     }
 }
