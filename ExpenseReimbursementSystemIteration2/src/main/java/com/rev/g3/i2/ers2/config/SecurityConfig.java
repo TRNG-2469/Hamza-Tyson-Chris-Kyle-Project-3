@@ -43,12 +43,18 @@ public class SecurityConfig {
                         // register and login are reachable with no token needed
                         .requestMatchers("/register", "/login").permitAll()
                         .requestMatchers("/departments", "/departments/*").permitAll()
+                        // map and allow swagger ui to be be open to public, anyone can access it
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
 
                         // let these html come through pleaseeee
                                 .requestMatchers("/", "/*.html").permitAll()
                         // approve/deny and the all-reimbursements view are manager-only
 
                         .requestMatchers("/manager/**").hasRole("MANAGER")
+
+
+
                         .anyRequest().authenticated()
                 )
                 // our JWT check before Spring's default filter, so it can populate the SecurityContext first
