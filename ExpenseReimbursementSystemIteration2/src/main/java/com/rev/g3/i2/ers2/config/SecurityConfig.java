@@ -48,7 +48,7 @@ public class SecurityConfig {
 
 
                         // let these html come through pleaseeee
-                                .requestMatchers("/", "/*.html").permitAll()
+                                .requestMatchers("/", "/*.html", "/*.css").permitAll()
                         // approve/deny and the all-reimbursements view are manager-only
 
                         .requestMatchers("/manager/**").hasRole("MANAGER")

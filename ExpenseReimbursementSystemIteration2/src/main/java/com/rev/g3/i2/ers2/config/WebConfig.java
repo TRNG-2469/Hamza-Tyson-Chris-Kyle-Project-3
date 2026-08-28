@@ -11,7 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // any request for /<name>.html gets served from classpath:/pages/<name>.html
 
-        registry.addResourceHandler("/*.html")
+        registry.addResourceHandler("/*.html", "/*.css")
                 .addResourceLocations("classpath:/pages/");
     }
 // redirct when logout
