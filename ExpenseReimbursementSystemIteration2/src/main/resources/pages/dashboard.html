@@ -26,7 +26,6 @@
                 <option value="APPROVED">Approved</option>
                 <option value="DENIED">Denied</option>
             </select>
-            <button id="loadMyReimbursements">View My Reimbursements</button>
             <div id="myReimbursements"></div>
             <button id="loadMyReimbursements" class="btn">View My Reimbursements</button>
         </section>
@@ -205,7 +204,7 @@
                         }
                         resolvedByText = resolverNames[reimbursement.resolverId];
                     }
-
+                    const holder = document.createElement("div")
                     const item = document.createElement("p");
                     item.textContent =
                         "ID: " + reimbursement.reimbursementId +
@@ -213,12 +212,9 @@
                         " | Type: " + reimbursement.type +
                         " | Status: " + reimbursement.status +
                         " | Author ID: " + reimbursement.authorId +
-                        // display a resolver id of manager who approved or denied the reim
-                        " | Resolved by: " + (reimbursement.resolverId || "-");
-                    holder.appendChild(item);
                         // now a real username instead of a raw resolverId number
-                        " | Resolved by: " + resolvedByText;
-                    results.appendChild(item);
+                        " | Resolved by: " + (resolvedByText || "-");
+                    holder.appendChild(item);
 
                     // only pending items can be approved or denied
                     if (reimbursement.status === "PENDING") {
@@ -234,7 +230,6 @@
                         holder.appendChild(denyButton);
                     }
                     results.appendChild(holder);
-                });
                 }
             }
 
