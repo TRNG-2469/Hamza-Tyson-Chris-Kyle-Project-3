@@ -77,4 +77,11 @@ public class UserServiceImp implements UserService{
         createdUser.setPassword(null);
         return createdUser;
     }
+
+    // implement the fidnById
+    @Override
+    public User findById(int id) {
+        return userDAO.findById(id).orElse(null);
+    }
+
 }

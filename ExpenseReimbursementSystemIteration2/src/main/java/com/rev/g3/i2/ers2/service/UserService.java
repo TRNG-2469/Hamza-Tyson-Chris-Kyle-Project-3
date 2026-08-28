@@ -8,4 +8,7 @@ public interface UserService {
     public User searchByUsername(String username);
     public User login(String username, String password);
     public User register(User user);
+    // diplay name at id
+    public User findById(int id);
+
 }

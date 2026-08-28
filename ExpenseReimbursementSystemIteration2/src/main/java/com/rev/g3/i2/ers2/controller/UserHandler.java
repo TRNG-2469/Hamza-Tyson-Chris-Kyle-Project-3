@@ -55,6 +55,26 @@ public class UserHandler {
         UserResponse response = new UserResponse(user.getUserId(), user.getUsername(), user.getRole());
         return ResponseEntity.ok(response);
     }
+
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserResponse> getUserById(@PathVariable int id) {
+
+        // Find the user by the ID from the URL
+        User user = userService.findById(id);
+
+        // If user does not exist return 404 Not Found
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Convert User entity into UserResponse DTO
+        UserResponse response =
+                new UserResponse(user.getUserId(), user.getUsername(), user.getRole());
+
+        // Return the user data with HTTP 200 OK
+        return ResponseEntity.ok(response);
+    }
 }
 
 
