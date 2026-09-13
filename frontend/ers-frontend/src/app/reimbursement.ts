@@ -1,4 +1,5 @@
 export interface Reimbursement { 
+    id: number;
     title: string; 
     amount: number; 
     date: string; 

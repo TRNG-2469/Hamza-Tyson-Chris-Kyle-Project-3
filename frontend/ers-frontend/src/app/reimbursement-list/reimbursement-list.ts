@@ -1,22 +1,52 @@
-import { Component } from '@angular/core';
-import { Reimbursementervice } from '../reimbursement-service';
+import { Component, Output, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
+
+import { MatTableModule } from '@angular/material/table';
+
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { ReimbursementService } from '../reimbursement-service';
+import { Reimbursement } from '../reimbursement';
 
 @Component({
-  imports: [],
+  imports: [MatTableModule, MatSortModule],
+
   selector: 'app-reimbursement-list',
   styleUrl: './reimbursement-list.css',
   templateUrl: './reimbursement-list.html',
 })
 export class ReimbursementList {
 
-  currentList: Reimbursement[];
+    @Output() reimbursementSelected = new EventEmitter<Reimbursement>();
 
-  constructor(private service: Reimbursementervice) { }
-
-  ngOnInit: void {
     
-    this.currentList = service.getDummyReimbursements();
-  }
+    @ViewChild(MatSort) sort!: MatSort;
+
+    dataSource: MatTableDataSource<Reimbursement>;
+
+    displayedColumns = [
+        'id',
+        'title',
+        'amount',
+        'date',
+        'status'
+    ];
+
+    selectedReimbursement: Reimbursement | null = null;
+
+    constructor(private service: ReimbursementService) {
+        this.dataSource = new MatTableDataSource(
+        this.service.getDummyReimbursements()
+        );
+    }
+
+    ngAfterViewInit() {
+        this.dataSource.sort = this.sort;
+    }
+
+    selectReimbursement(reimbursement: Reimbursement) {
+        this.selectedReimbursement = reimbursement;
+        this.reimbursementSelected.emit(reimbursement);
+    }
 
 
 }
