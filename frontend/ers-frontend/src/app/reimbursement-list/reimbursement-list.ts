@@ -1,4 +1,5 @@
-import { Component, Output, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Output, EventEmitter, ViewChild } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
 
 import { MatTableModule } from '@angular/material/table';
 
@@ -8,7 +9,7 @@ import { ReimbursementService } from '../reimbursement-service';
 import { Reimbursement } from '../reimbursement';
 
 @Component({
-  imports: [MatTableModule, MatSortModule],
+  imports: [MatTableModule, MatSortModule, CurrencyPipe],
 
   selector: 'app-reimbursement-list',
   styleUrl: './reimbursement-list.css',
