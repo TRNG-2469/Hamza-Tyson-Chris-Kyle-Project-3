@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -14,21 +14,18 @@ import { ErrorResponse } from '../core/models/error-response.model';
 })
 
 export class Login {
-    // singla for login error
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
   protected readonly errorMessage = signal<string | null>(null);
-  // signal for login submitting state
   protected readonly submitting = signal(false);
-  //create login form with username and password fields, both required
+
   protected readonly form = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required]
   });
-  // constructor injects FormBuilder, AuthService, and Router into the component
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {}
+
 
   // run when the login form is submitted
   onSubmit(): void {
