@@ -1,3 +1,6 @@
+@if (loggedInAs()) {
+  <p class="success">Logged in as {{ loggedInAs() }}!</p>
+}
 <div class="login-card">
   <h1>Login</h1>
 

@@ -20,37 +20,34 @@ export class Login {
 
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly submitting = signal(false);
+  // testing without dashboard page, show the username of the logged in user
+  protected readonly loggedInAs = signal<string | null>(null);
 
   protected readonly form = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required]
   });
-
-
-  // run when the login form is submitted
-  onSubmit(): void {
-    // check if form is invalid, marked as touched to show validation errors, and stop method call
+  // handle the form submission, validate the form, call the AuthService login method, and handle the response or error
+    onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-
-    // clear old error message, try login again
+    // reset the error message and set the submitting signal to true
     this.errorMessage.set(null);
-    // mark current form as submitting 
     this.submitting.set(true);
- // call the AuthService login method with the form values, and subscribe to the observable returned
+
     this.authService.login(this.form.getRawValue() as LoginRequest).subscribe({
-      next: () => {
+      next: (response) => {
         this.submitting.set(false);
-        this.router.navigateByUrl('/');
+        // for testing successful login, later will routet to dashboard page
+        this.loggedInAs.set(response.username);
       },
-      // retur error if backend end send http erros
+      //return an error message if the login fails, and reset the submitting signal
       error: (err: HttpErrorResponse) => {
         this.submitting.set(false);
         const body = err.error as ErrorResponse;
         this.errorMessage.set(body?.message ?? 'Login failed. Please try again.');
       }
     });
-  }
-}
+  }}
