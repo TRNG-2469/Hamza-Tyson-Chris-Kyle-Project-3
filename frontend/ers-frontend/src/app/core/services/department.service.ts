@@ -12,9 +12,9 @@ export class DepartmentService {
 
     }
     // get all method hit the GET/departments endpoint
-    gettAll(): Observable<Department[]> {
+    getAll(): Observable<Department[]> {
         // return the array of departments from the backend using the HttpClient GET
         return this.http.get<Department[]>(`${API_BASE_URL}/departments`);
-}
+}}
 
 

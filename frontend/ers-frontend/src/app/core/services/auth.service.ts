@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { API_BASE_URL } from '../config/api-config';
 import { LoginRequest } from '../models/login-request.model';
 import { AuthResponse } from '../models/auth-response.model';
+import { RegisterRequest } from '../models/register-request.model';
 
 // stored the login info in browser aka local storage 
 const STORAGE_KEY = 'ers_auth';
@@ -30,6 +31,14 @@ export class AuthService {
       })
     );
   }
+
+  
+  // send a POST request to backend /register endpoint with the registration data 
+  register(request: RegisterRequest): Observable<void> {
+    //return an void on successful registration 
+      return this.http.post<void>(`${API_BASE_URL}/register`, request);
+  }
+  
 // clear the login state from local storage and reset the authState signal
   logout(): void {
     localStorage.removeItem(STORAGE_KEY);
