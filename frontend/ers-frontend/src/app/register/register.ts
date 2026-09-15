@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { DepartmentService } from '../core/services/department.service';
 import { Department } from '../core/models/department.model';
@@ -14,7 +14,7 @@ const NAME_PATTERN = /^[a-zA-Z]+$/;
 // Tell Angular which HTML, CSS, and form features this component uses.
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './register.html',
   styleUrl: './register.css'
 })

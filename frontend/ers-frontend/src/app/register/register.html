@@ -1,0 +1,50 @@
+<div class="register-card">
+  <h1>Register</h1>
+
+  @if (errorMessage()) {
+    <p class="form-error">{{ errorMessage() }}</p>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label for="username">Username</label>
+    <input id="username" type="text" formControlName="username" />
+    @if (form.controls.username.touched && form.controls.username.invalid) {
+      <p class="field-error">Username is required.</p>
+    }
+
+    <label for="password">Password</label>
+    <input id="password" type="password" formControlName="password" />
+    @if (form.controls.password.touched && form.controls.password.invalid) {
+      <p class="field-error">Password is required.</p>
+    }
+
+    <label for="firstName">First Name</label>
+    <input id="firstName" type="text" formControlName="firstName" />
+    @if (form.controls.firstName.touched && form.controls.firstName.invalid) {
+      <p class="field-error">First name is required and must contain letters only.</p>
+    }
+
+    <label for="lastName">Last Name</label>
+    <input id="lastName" type="text" formControlName="lastName" />
+    @if (form.controls.lastName.touched && form.controls.lastName.invalid) {
+      <p class="field-error">Last name is required and must contain letters only.</p>
+    }
+
+    <label for="departmentId">Department</label>
+    <select id="departmentId" formControlName="departmentId">
+      <option value="" disabled>Select a department</option>
+      @for (dept of departments(); track dept.departmentId) {
+        <option [value]="dept.departmentId">{{ dept.departmentName }}</option>
+      }
+    </select>
+    @if (form.controls.departmentId.touched && form.controls.departmentId.invalid) {
+      <p class="field-error">Please select a department.</p>
+    }
+
+    <button type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'Registering...' : 'Register' }}
+    </button>
+  </form>
+
+  <p class="switch-link">Already have an account? <a routerLink="/login">Log in</a></p>
+</div>
