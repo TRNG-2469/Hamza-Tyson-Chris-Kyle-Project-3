@@ -41,7 +41,9 @@ export class Login {
       next: (response) => {
         this.submitting.set(false);
         // for testing successful login, later will routet to dashboard page
+         // this.router.navigate(['/dashboard']);
         this.loggedInAs.set(response.username);
+       
       },
       //return an error message if the login fails, and reset the submitting signal
       error: (err: HttpErrorResponse) => {
