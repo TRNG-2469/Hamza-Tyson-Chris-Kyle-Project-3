@@ -13,6 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -30,9 +35,32 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+    // the Angular dev server runs on its own origin (localhost:4200), separate from the backend (localhost:8080)
+    // browsers block cross-origin requests by default, so we need to explicitly allow the frontend's origin here
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        // only the Angular dev server is allowed to call this API for now
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        // every HTTP method our controllers use, plus OPTIONS for the browser's preflight check
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        // Content-Type for JSON bodies, Authorization so our JWT bearer token is allowed through
+        configuration.setAllowedHeaders(List.of("Content-Type", "Authorization"));
+
+        // apply this CORS policy to every endpoint in the app
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
         http
+                // wire the CORS policy above into Spring Security's filter chain — without this,
+                // Security's own filters would block the browser's preflight OPTIONS request
+                // before it ever reaches the CORS headers above
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
                 // CSRF protects cookie-based sessions; irrelevant for stateless bearer-token auth
                 .csrf(AbstractHttpConfigurer::disable)
 
