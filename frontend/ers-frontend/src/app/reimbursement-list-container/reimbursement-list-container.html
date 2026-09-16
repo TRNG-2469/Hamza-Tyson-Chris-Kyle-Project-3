@@ -1,4 +1,19 @@
+<div class="header">
+  <h1>Expense Reimbursement System</h1>
+  <button class="logout-btn" id="list-re-button">My Reimbursements</button>
+  <button class="logout-btn" id="submit-re-button">Submit Reimbursements</button>
+  @if(authService.currentRole() == "MANAGER") {
+    <button class="logout-btn" id="manage-re-button">Manage Reimbursements</button>
+  }
+  <button class="logout-btn" id="logoutButton">Log Out</button>
+</div>
+
 <div class="reimbursement-layout">
   <app-reimbursement-list class="reimbursement-list" (reimbursementSelected)="handleSelectReimbursement($event)"></app-reimbursement-list>
-  <app-reimbursement-details-panel class="reimbursement-details" [selectedReimbursement]="selectedReimbursement"></app-reimbursement-details-panel>
+
+  @if(startedEdit){
+    <app-reimbursement-edit [selectedReimbursement]="selectedReimbursement"></app-reimbursement-edit>
+  } @else {
+    <app-reimbursement-details-panel class="reimbursement-details" [selectedReimbursement]="selectedReimbursement"></app-reimbursement-details-panel>
+  }
 </div>

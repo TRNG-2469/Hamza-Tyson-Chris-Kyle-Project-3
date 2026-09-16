@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Reimbursement } from '../reimbursement';
 
 @Component({
@@ -8,6 +8,12 @@ import { Reimbursement } from '../reimbursement';
   templateUrl: './reimbursement-details-panel.html',
 })
 export class ReimbursementDetailsPanel {
+  @Input() selectedReimbursement: Reimbursement | null = null;
 
-    @Input() selectedReimbursement: Reimbursement | null = null;
+  @Output()
+  editStarted: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  startEdit() {
+    this.editStarted.emit(true);
+  }
 }

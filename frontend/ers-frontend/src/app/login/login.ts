@@ -41,9 +41,8 @@ export class Login {
     this.authService.login(this.form.getRawValue() as LoginRequest).subscribe({
       next: (response) => {
         this.submitting.set(false);
-        // for testing successful login, later will routet to dashboard page
-         // this.router.navigate(['/dashboard']);
-        this.loggedInAs.set(response.username);
+        // will route to dashboard (path: 'reimbursements/:id)
+        this.router.navigate(['/reimbursements', response.userId]); // get the userid from the response body
        
       },
       //return an error message if the login fails, and reset the submitting signal

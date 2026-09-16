@@ -9,11 +9,14 @@ public class AuthResponse {
     private String token;
     private String username;
     private Role role;
+    // userid for login and later call that need userid parameter
+    private int userId;
 
-    public AuthResponse(String token, String username, Role role ) {
+    public AuthResponse(String token, String username, Role role, int userId) {
         this.token = token;
         this.username = username;
         this.role = role;
+        this.userId = userId;
 
 
     }
@@ -40,5 +43,13 @@ public class AuthResponse {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public int getUserId(){
+        return userId;
+    }
+
+    public void setUserId(int userId){
+        this.userId = userId;
     }
 }

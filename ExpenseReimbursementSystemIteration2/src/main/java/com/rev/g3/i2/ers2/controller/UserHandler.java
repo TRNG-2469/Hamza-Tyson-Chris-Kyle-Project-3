@@ -44,7 +44,7 @@ public class UserHandler {
         UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
         // sign a fresh token for this login
         String token = jwtService.generateToken(principal);
-        AuthResponse response = new AuthResponse(token, principal.getUsername(), principal.getUser().getRole());
+        AuthResponse response = new AuthResponse(token, principal.getUsername(), principal.getUser().getRole(), principal.getUser().getUserId());
         return ResponseEntity.ok(response);
     }
 
