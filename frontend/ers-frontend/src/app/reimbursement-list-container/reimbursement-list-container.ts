@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ReimbursementList } from '../reimbursement-list/reimbursement-list';
 import { ReimbursementDetailsPanel } from '../reimbursement-details-panel/reimbursement-details-panel';
 import { Reimbursement } from '../reimbursement';
@@ -12,7 +12,7 @@ import { AuthService } from '../core/services/auth.service';
   templateUrl: './reimbursement-list-container.html',
 })
 export class ReimbursementListContainer {
-    authService: AuthService = Inject(AuthService);
+    authService: AuthService = inject(AuthService);
 
     selectedReimbursement: Reimbursement | null = null;
     startedEdit: boolean = false;
