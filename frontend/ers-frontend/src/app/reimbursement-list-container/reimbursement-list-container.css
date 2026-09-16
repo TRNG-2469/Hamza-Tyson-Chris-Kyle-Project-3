@@ -1,0 +1,20 @@
+.reimbursement-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.reimbursement-layout > .reimbursement-list,
+.reimbursement-layout > app-reimbursement-list {
+  flex: 1.8;
+  min-width: 0;
+}
+
+.reimbursement-layout > .reimbursement-details,
+.reimbursement-layout > app-reimbursement-details-panel {
+  flex: 1;
+  min-width: 280px;
+}

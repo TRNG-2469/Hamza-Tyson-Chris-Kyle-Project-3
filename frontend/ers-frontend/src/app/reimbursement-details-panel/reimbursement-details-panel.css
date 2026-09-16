@@ -1,0 +1,23 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+div {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  min-height: 220px;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+p {
+  margin: 10px 0;
+  color: #333;
+}

@@ -1,0 +1,11 @@
+<div>
+    <h2>Reimbursement Details</h2>
+    @if (selectedReimbursement) {
+        <p>ID: {{ selectedReimbursement.id }}</p>
+        <p>Amount: {{ selectedReimbursement.amount }}</p>
+        <p>Description: {{ selectedReimbursement.description }}</p>
+        <p>Status: {{ selectedReimbursement.status }}</p>
+    } @else {
+        <p>No reimbursement selected.</p>
+    }
+</div>
