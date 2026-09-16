@@ -1,9 +1,9 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ReimbursementList } from './reimbursement-list/reimbursement-list';
+// import { ReimbursementList } from './reimbursement-list/reimbursement-list';
 
 @Component({
-  imports: [RouterOutlet, ReimbursementList],
+  imports: [RouterOutlet],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',

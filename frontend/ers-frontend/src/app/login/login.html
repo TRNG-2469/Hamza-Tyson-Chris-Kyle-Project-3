@@ -1,27 +1,36 @@
+<div class="header">
+  <h1 class="logo">Expense Reimbursement System</h1>
+</div>
+<div class="subheader">
+  <h2>Login</h2>
+</div>
+
 @if (loggedInAs()) {
   <p class="success">Logged in as {{ loggedInAs() }}!</p>
 }
 <div class="login-card">
-  <h1>Login</h1>
-
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <label for="username">Username</label>
-    <input id="username" type="text" formControlName="username" />
-    @if (form.controls.username.touched && form.controls.username.invalid) {
-      <p class="field-error">Username is required.</p>
-    }
+    <div class="form-field">
+      <label for="username">Username</label>
+      <input id="username" type="text" formControlName="username" />
+      @if (form.controls.username.touched && form.controls.username.invalid) {
+        <p class="field-error">Username is required.</p>
+      }
+    </div>
 
-    <label for="password">Password</label>
-    <input id="password" type="password" formControlName="password" />
-    @if (form.controls.password.touched && form.controls.password.invalid) {
-      <p class="field-error">Password is required.</p>
-    }
+    <div class="form-field">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" />
+      @if (form.controls.password.touched && form.controls.password.invalid) {
+        <p class="field-error">Password is required.</p>
+      }
+    </div>
 
     @if (errorMessage()) {
       <p class="form-error">{{ errorMessage() }}</p>
     }
 
-    <button type="submit" [disabled]="submitting()">
+    <button class="btn" type="submit" [disabled]="submitting()">
       {{ submitting() ? 'Logging in...' : 'Login' }}
     </button>
   </form>
