@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { RouterOutlet,Router } from '@angular/router';
 // import { ReimbursementList } from './reimbursement-list/reimbursement-list';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   imports: [RouterOutlet],
@@ -9,5 +10,18 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.html',
 })
 export class App {
+  // angular provide the AuthService object 
+  protected readonly authService = inject(AuthService);
+  // angular give Router to navigate between pages
+  private readonly router = inject(Router); 
   protected readonly title = signal('ers-frontend');
+
+  // click logout button
+  onLogout(): void{
+    // call the inject service logout method
+    this.authService.logout();
+    // send user back to login page
+    this.router.navigateByUrl('/login')
+  }
+  
 }

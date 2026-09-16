@@ -19,6 +19,8 @@ export class AuthService {
   readonly isAuthenticated = computed(() => this.authState() !== null);
   readonly currentRole = computed(() => this.authState()?.role ?? null);
   readonly token = computed(() => this.authState()?.token ?? null);
+  // expose the username
+  readonly username = computed(() => this.authState()?.username ?? null);
 
 
   constructor(private http: HttpClient) {}
