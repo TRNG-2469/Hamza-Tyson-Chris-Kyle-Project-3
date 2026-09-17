@@ -5,8 +5,10 @@
         <p>Amount: {{ selectedReimbursement.amount }}</p>
         <p>Description: {{ selectedReimbursement.description }}</p>
         <p>Status: {{ selectedReimbursement.status }}</p>
-
-        <button (click)="startEdit()">Edit</button>
+        @if (selectedReimbursement.status.toLowerCase() === 'pending') {
+            <button (click)="startEdit()">Edit</button>
+        }
+        
     } @else {
         <p>No reimbursement selected.</p>
     }

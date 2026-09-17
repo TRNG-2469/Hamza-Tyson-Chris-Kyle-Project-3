@@ -10,7 +10,7 @@
 
 <div class="reimbursement-layout">
   @if(isSubmitting) {
-    <app-reimbursement-submission></app-reimbursement-submission>
+    <app-reimbursement-submission (isSubmitting)="checkSubmit($event)"></app-reimbursement-submission>
   } @else {
     <app-reimbursement-list class="reimbursement-list" (reimbursementSelected)="handleSelectReimbursement($event)"></app-reimbursement-list>
 
