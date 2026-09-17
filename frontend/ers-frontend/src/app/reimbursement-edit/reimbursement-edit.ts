@@ -53,10 +53,16 @@ export class ReimbursementEdit {
       authorId: 0,
     };
 
+    this.reimbursementService.updateReimbursement(request).subscribe({
+      next: (response) => {
+        console.log('Reimbursement update successfully:', response);
+      }});
+
     this.isEditing.emit(false);
   }
 
+
   cancelEdits() {
     this.isEditing.emit(false);
-  }
+  };
 }

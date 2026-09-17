@@ -19,7 +19,7 @@ export class ReimbursementService {
 
   private http = inject(HttpClient);
 
-  
+
 
   getReimbursements(): Observable<Reimbursement[]> {
     if (this.userId === null) {
@@ -34,6 +34,11 @@ export class ReimbursementService {
     const url = `${this.baseUrl}/manager/reimbursements`;
 
     return this.http.get<Reimbursement[]>(url);
+  }
+  updateReimbursement(reimbursement: Reimbursement): Observable<Reimbursement> {
+    const url = `${this.baseUrl}/reimbursements/${reimbursement.reimbursementId}`;
+
+    return this.http.patch<Reimbursement>(url, reimbursement);
   }
 
   updateReimbursementStatus(
