@@ -58,8 +58,9 @@ export class ReimbursementSubmission {
     this.reimbursementService.submitReimbursement(request).subscribe({
       next: (response) => {
         console.log('Reimbursement submitted successfully:', response);
-        this.router.navigate(['/reimbursements', this.authService.userId()]); 
+        // this.router.navigate(['/reimbursements', this.authService.userId()]);
       }});
+
     this.isSubmitting.emit(false);
   }
 }
