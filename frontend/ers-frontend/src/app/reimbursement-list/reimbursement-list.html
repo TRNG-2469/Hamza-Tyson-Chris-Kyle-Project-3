@@ -17,28 +17,26 @@
 <table mat-table [dataSource]="dataSource" matSort>
 
   <!-- ID -->
-  <ng-container matColumnDef="id">
+  <ng-container matColumnDef="reimbursementId">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>
       ID
     </th>
 
     <td mat-cell *matCellDef="let reimbursement">
-      {{ reimbursement.id }}
+      {{ reimbursement.reimbursementId }}
     </td>
   </ng-container>
 
-
-  <!-- Title -->
-  <ng-container matColumnDef="title">
+  <!-- Description -->
+  <ng-container matColumnDef="description">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>
-      Title
+      Description
     </th>
 
     <td mat-cell *matCellDef="let reimbursement">
-      {{ reimbursement.title }}
+      {{ reimbursement.description }}
     </td>
   </ng-container>
-
 
   <!-- Amount -->
   <ng-container matColumnDef="amount">
@@ -51,19 +49,6 @@
     </td>
   </ng-container>
 
-
-  <!-- Date -->
-  <ng-container matColumnDef="date">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>
-      Date
-    </th>
-
-    <td mat-cell *matCellDef="let reimbursement">
-      {{ reimbursement.date }}
-    </td>
-  </ng-container>
-
-
   <!-- Status -->
   <ng-container matColumnDef="status">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -71,7 +56,7 @@
     </th>
 
     <td mat-cell *matCellDef="let reimbursement">
-      {{ reimbursement.status }}
+      {{ reimbursement.status | titlecase }}
     </td>
   </ng-container>
 
@@ -88,7 +73,7 @@
     mat-row
     *matRowDef="let reimbursement; columns: displayedColumns"
     (click)="selectReimbursement(reimbursement)"
-    [class.selected-row]="selectedReimbursement?.id === reimbursement.id">
+    [class.selected-row]="selectedReimbursement?.reimbursementId === reimbursement.reimbursementId">
   </tr>
 
 </table>

@@ -2,27 +2,27 @@
   <mat-expansion-panel-header>
     <mat-panel-title>Filter reimbursements</mat-panel-title>
   </mat-expansion-panel-header>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Status</mat-label>
+    <mat-select [value]="selectedStatus" (selectionChange)="filterByStatus($event)">
+      <mat-option value="">All statuses</mat-option>
+      @for (status of statuses; track status) {
+        <mat-option [value]="status">{{ status | titlecase }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
 </mat-expansion-panel>
 
 <table mat-table [dataSource]="dataSource" matSort>
-  <ng-container matColumnDef="id">
+  <ng-container matColumnDef="reimbursementId">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-    <td mat-cell *matCellDef="let reimbursement">{{ reimbursement.id }}</td>
+    <td mat-cell *matCellDef="let reimbursement">{{ reimbursement.reimbursementId }}</td>
   </ng-container>
 
-  <ng-container matColumnDef="title">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
-    <td mat-cell *matCellDef="let reimbursement">{{ reimbursement.title }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="authorUsername">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Author username</th>
-    <td mat-cell *matCellDef="let reimbursement">{{ reimbursement.authorUsername ?? 'Unknown' }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="authorDepartment">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Author department</th>
-    <td mat-cell *matCellDef="let reimbursement">{{ reimbursement.authorDepartment ?? 'Unknown' }}</td>
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+    <td mat-cell *matCellDef="let reimbursement">{{ reimbursement.description }}</td>
   </ng-container>
 
   <ng-container matColumnDef="amount">
@@ -30,9 +30,9 @@
     <td mat-cell *matCellDef="let reimbursement">{{ reimbursement.amount | currency:'USD':'symbol':'1.2-2' }}</td>
   </ng-container>
 
-  <ng-container matColumnDef="date">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-    <td mat-cell *matCellDef="let reimbursement">{{ reimbursement.date }}</td>
+  <ng-container matColumnDef="type">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+    <td mat-cell *matCellDef="let reimbursement">{{ reimbursement.type | titlecase }}</td>
   </ng-container>
 
   <ng-container matColumnDef="status">
@@ -43,5 +43,5 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let reimbursement; columns: displayedColumns"
       (click)="selectReimbursement(reimbursement)"
-      [class.selected-row]="selectedReimbursement?.id === reimbursement.id"></tr>
+      [class.selected-row]="selectedReimbursement?.reimbursementId === reimbursement.reimbursementId"></tr>
 </table>

@@ -1,7 +1,10 @@
 import { Component, Output, EventEmitter, ViewChild } from '@angular/core';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, TitleCasePipe } from '@angular/common';
 
 import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,7 +13,15 @@ import { Reimbursement } from '../reimbursement';
 import { AuthService } from '../core/services/auth.service';
 
 @Component({
-  imports: [MatTableModule, MatSortModule, CurrencyPipe],
+    imports: [
+        MatTableModule,
+        MatSortModule,
+        MatExpansionModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        CurrencyPipe,
+        TitleCasePipe,
+    ],
 
   selector: 'app-reimbursement-list',
   styleUrl: './reimbursement-list.css',
@@ -25,7 +36,8 @@ export class ReimbursementList {
     dataSource: MatTableDataSource<Reimbursement>;
 
     displayedColumns = [
-        'id',
+        'reimbursementId',
+        'description',
         'amount',
         'status'
     ];
@@ -33,6 +45,8 @@ export class ReimbursementList {
     selectedReimbursement: Reimbursement | null = null;
 
     reimbursements: Reimbursement[] = [];
+    readonly statuses: Reimbursement['status'][] = ['pending', 'approved', 'denied'];
+    selectedStatus: Reimbursement['status'] | '' = '';
 
     constructor(private service: ReimbursementService, private authService: AuthService) {
         this.dataSource = new MatTableDataSource<Reimbursement>([]);
@@ -66,6 +80,15 @@ export class ReimbursementList {
     selectReimbursement(reimbursement: Reimbursement) {
         this.selectedReimbursement = reimbursement;
         this.reimbursementSelected.emit(reimbursement);
+    }
+
+    filterByStatus(event: MatSelectChange) {
+        this.selectedStatus = event.value as Reimbursement['status'] | '';
+        this.dataSource.data = this.selectedStatus
+            ? this.reimbursements.filter((reimbursement) =>
+                reimbursement.status.toLowerCase() === this.selectedStatus,
+            )
+            : this.reimbursements;
     }
 
 
