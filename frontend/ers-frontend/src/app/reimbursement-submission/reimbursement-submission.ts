@@ -1,11 +1,11 @@
 import { Component, inject, Input, signal, WritableSignal } from '@angular/core';
 import { Reimbursement } from '../reimbursement';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RegisterRequest } from '../core/models/register-request.model';
 import { ReimbursementService } from '../reimbursement-service';
 
 @Component({
-  imports: [],
+  imports: [ReactiveFormsModule],
   selector: 'app-reimbursement-submission',
   styleUrl: './reimbursement-submission.css',
   templateUrl: './reimbursement-submission.html',
@@ -36,9 +36,8 @@ export class ReimbursementSubmission {
       amount: raw.amount,
       description: raw.description,
       type: raw.type,
-      status: "PENDING",
-      authorId: 0
-    }
-
+      status: 'PENDING',
+      authorId: 0,
+    };
   }
 }

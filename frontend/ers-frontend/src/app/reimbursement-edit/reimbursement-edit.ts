@@ -8,11 +8,11 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { Reimbursement } from '../reimbursement';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ReimbursementService } from '../reimbursement-service';
 
 @Component({
-  imports: [],
+  imports: [ReactiveFormsModule],
   selector: 'app-reimbursement-edit',
   styleUrl: './reimbursement-edit.css',
   templateUrl: './reimbursement-edit.html',
