@@ -1,4 +1,14 @@
 <main>
+  <div class="header">
+    <h1>Expense Reimbursement System</h1>
+    <button class="logout-btn" id="list-re-button" [routerLink]="['/reimbursements', authService.userId()]">My Reimbursements</button>
+    <button class="logout-btn" id="submit-re-button">Submit Reimbursements</button>
+    @if(authService.currentRole() == "MANAGER") {
+      <button class="logout-btn" id="manage-re-button" routerLink="/manager/reimbursements">Manage Reimbursements</button>
+    }
+    <button class="logout-btn" id="logoutButton" (click)="onLogout()">Log Out</button>
+  </div>
+
   <h1>Manage Reimbursements</h1>
   <div class="reimbursement-layout">
     <app-manager-reimbursement-list
@@ -9,7 +19,7 @@
     <app-manager-reimbursement-details-panel
       class="reimbursement-details"
       [selectedReimbursement]="selectedReimbursement"
-      [currentUsername]="authService.username()">
+      (statusChanged)="handleStatusChanged($event)">
     </app-manager-reimbursement-details-panel>
   </div>
 </main>

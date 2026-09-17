@@ -1,5 +1,5 @@
 export interface Reimbursement {
-  id: number;
+  reimbursementId: number;
   amount: number;
   description: string;
   type: 'travel' | 'food' | 'lodging' | 'other';

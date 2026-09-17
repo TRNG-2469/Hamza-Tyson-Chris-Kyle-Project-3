@@ -3,7 +3,7 @@
   <button class="logout-btn" id="list-re-button">My Reimbursements</button>
   <button class="logout-btn" id="submit-re-button">Submit Reimbursements</button>
   @if(authService.currentRole() == "MANAGER") {
-    <button class="logout-btn" id="manage-re-button">Manage Reimbursements</button>
+    <button class="logout-btn" id="manage-re-button" routerLink="/manager/reimbursements">Manage Reimbursements</button>
   }
   <button class="logout-btn" id="logoutButton" (click)="onLogout()">Log Out</button>
 </div>
