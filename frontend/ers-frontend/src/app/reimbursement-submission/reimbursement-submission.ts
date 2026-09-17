@@ -1,33 +1,20 @@
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  Output,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, inject, Input, signal, WritableSignal } from '@angular/core';
 import { Reimbursement } from '../reimbursement';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RegisterRequest } from '../core/models/register-request.model';
 import { ReimbursementService } from '../reimbursement-service';
 
 @Component({
   imports: [],
-  selector: 'app-reimbursement-edit',
-  styleUrl: './reimbursement-edit.css',
-  templateUrl: './reimbursement-edit.html',
-  standalone: true,
+  selector: 'app-reimbursement-submission',
+  styleUrl: './reimbursement-submission.css',
+  templateUrl: './reimbursement-submission.html',
 })
-export class ReimbursementEdit {
+export class ReimbursementSubmission {
   private readonly formBuilder: FormBuilder = inject(FormBuilder);
   private readonly reimbursementService: ReimbursementService = inject(ReimbursementService);
 
   protected readonly errorMessage: WritableSignal<string | null> = signal<string | null>(null);
-
-  @Input() selectedReimbursement: Reimbursement | null = null;
-
-  @Output()
-  editStarted: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   protected readonly form = this.formBuilder.group({
     amount: [0, Validators.required],
@@ -35,7 +22,7 @@ export class ReimbursementEdit {
     type: ['', Validators.required],
   });
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -48,10 +35,7 @@ export class ReimbursementEdit {
       amount: raw.amount,
       description: raw.description,
       type: raw.type,
-    };
-  }
+    }
 
-  cancelEdits() {
-    this.editStarted.emit(false);
   }
 }
