@@ -3,11 +3,12 @@ import { Reimbursement } from './reimbursement';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-@Injectable({ providedIn: 'root' })
+
 @Service()
 export class ReimbursementService {
   private userId: number | null = null;
   private baseUrl = 'http://localhost:8080';
+  
   setUserId(userId: number): void {
     this.userId = userId;
   }
