@@ -62,15 +62,19 @@ export class ReimbursementList {
             return;
         }
 
-        this.service.getReimbursements().subscribe({
-        next: (response: Reimbursement[]) => {
-            this.reimbursements = response;
-            this.dataSource.data = response;
+        this.refresh();
+    }
+
+    refresh() {
+      this.service.getReimbursements().subscribe({
+        next: (reimbursements) => {
+          this.reimbursements = reimbursements;
+          this.applyStatusFilter();
         },
         error: (error) => {
-            console.error('API error:', error);
-        }
-        });
+          console.error('Reimbursements API error:', error);
+        },
+      });
     }
 
     ngAfterViewInit() {
@@ -83,13 +87,15 @@ export class ReimbursementList {
     }
 
     filterByStatus(event: MatSelectChange) {
-        this.selectedStatus = event.value as Reimbursement['status'] | '';
-        this.dataSource.data = this.selectedStatus
-            ? this.reimbursements.filter((reimbursement) =>
-                reimbursement.status.toLowerCase() === this.selectedStatus,
-            )
-            : this.reimbursements;
+      this.selectedStatus = event.value as Reimbursement['status'] | '';
+      this.applyStatusFilter();
     }
 
-
+    private applyStatusFilter() {
+      this.dataSource.data = this.selectedStatus
+        ? this.reimbursements.filter((reimbursement) =>
+          reimbursement.status.toLowerCase() === this.selectedStatus,
+        )
+        : this.reimbursements;
+    }
 }
