@@ -7,6 +7,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ReimbursementService } from '../reimbursement-service';
 import { Reimbursement } from '../reimbursement';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   imports: [MatTableModule, MatSortModule, CurrencyPipe],
@@ -25,17 +26,37 @@ export class ReimbursementList {
 
     displayedColumns = [
         'id',
-        'description',
         'amount',
         'status'
     ];
 
     selectedReimbursement: Reimbursement | null = null;
 
-    constructor(private service: ReimbursementService) {
-          this.dataSource = new MatTableDataSource(
-          this.service.getDummyReimbursements()
-        );
+    reimbursements: Reimbursement[] = [];
+
+    constructor(private service: ReimbursementService, private authService: AuthService) {
+        this.dataSource = new MatTableDataSource<Reimbursement>([]);
+
+        const userId = this.authService.userId();
+        if (userId !== null) {
+            this.service.setUserId(userId);
+        }
+    }
+
+    ngOnInit(): void {
+        if (this.authService.userId() === null) {
+            return;
+        }
+
+        this.service.getReimbursements().subscribe({
+        next: (response: Reimbursement[]) => {
+            this.reimbursements = response;
+            this.dataSource.data = response;
+        },
+        error: (error) => {
+            console.error('API error:', error);
+        }
+        });
     }
 
     ngAfterViewInit() {

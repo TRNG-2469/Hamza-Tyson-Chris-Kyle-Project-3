@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Reimbursement } from '../reimbursement';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   imports: [],
@@ -9,11 +10,12 @@ import { Reimbursement } from '../reimbursement';
 })
 export class ManagerReimbursementDetailsPanel {
   @Input() selectedReimbursement: Reimbursement | null = null;
-  @Input() currentUsername: string | null = null;
   @Output() statusChanged = new EventEmitter<Reimbursement>();
 
+  authService = inject(AuthService);
+
   get isAuthor(): boolean {
-    return this.selectedReimbursement?.authorUsername === this.currentUsername;
+    return this.selectedReimbursement?.authorId === this.authService.userId();
   }
 
   updateStatus(status: 'approved' | 'denied') {

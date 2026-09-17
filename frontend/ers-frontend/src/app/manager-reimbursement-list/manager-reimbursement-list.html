@@ -2,16 +2,6 @@
   <mat-expansion-panel-header>
     <mat-panel-title>Filter reimbursements</mat-panel-title>
   </mat-expansion-panel-header>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Author department</mat-label>
-    <mat-select [value]="selectedDepartment" (selectionChange)="filterByDepartment($event)">
-      <mat-option value="">All departments</mat-option>
-      @for (department of departments; track department) {
-        <mat-option [value]="department">{{ department }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
 </mat-expansion-panel>
 
 <table mat-table [dataSource]="dataSource" matSort>

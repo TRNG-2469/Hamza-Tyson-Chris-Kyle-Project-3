@@ -27,28 +27,19 @@ export class ManagerReimbursementList {
   @ViewChild(MatSort) sort!: MatSort;
 
   private readonly reimbursements: Reimbursement[];
-  readonly departments: string[];
   readonly dataSource: MatTableDataSource<Reimbursement>;
   selectedDepartment = '';
   selectedReimbursement: Reimbursement | null = null;
 
-  displayedColumns = ['id', 'title', 'authorUsername', 'authorDepartment', 'amount', 'date', 'status'];
+  displayedColumns = ['id', 'title', 'amount', 'status'];
 
   constructor(private readonly service: ReimbursementService) {
     this.reimbursements = this.service.getDummyReimbursements();
-    this.departments = [...new Set(this.reimbursements.map((reimbursement) => reimbursement.authorDepartment ?? 'Unknown'))].sort();
     this.dataSource = new MatTableDataSource(this.reimbursements);
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
-  }
-
-  filterByDepartment(event: MatSelectChange) {
-    this.selectedDepartment = event.value as string;
-    this.dataSource.data = this.selectedDepartment
-      ? this.reimbursements.filter((reimbursement) => reimbursement.authorDepartment === this.selectedDepartment)
-      : this.reimbursements;
   }
 
   selectReimbursement(reimbursement: Reimbursement) {
