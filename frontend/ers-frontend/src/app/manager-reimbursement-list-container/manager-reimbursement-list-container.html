@@ -1,7 +1,7 @@
 <main>
   <div class="header">
     <h1>Expense Reimbursement System</h1>
-    <button class="logout-btn" id="list-re-button">My Reimbursements</button>
+    <button class="logout-btn" id="list-re-button" [routerLink]="['/reimbursements', authService.userId()]">My Reimbursements</button>
     <button class="logout-btn" id="submit-re-button">Submit Reimbursements</button>
     @if(authService.currentRole() == "MANAGER") {
       <button class="logout-btn" id="manage-re-button" routerLink="/manager/reimbursements">Manage Reimbursements</button>
