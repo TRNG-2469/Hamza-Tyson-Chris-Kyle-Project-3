@@ -4,6 +4,7 @@ import { ReimbursementDetailsPanel } from '../reimbursement-details-panel/reimbu
 import { Reimbursement } from '../reimbursement';
 import { ReimbursementEdit } from '../reimbursement-edit/reimbursement-edit';
 import { AuthService } from '../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   imports: [ReimbursementList, ReimbursementDetailsPanel, ReimbursementEdit],
@@ -13,11 +14,19 @@ import { AuthService } from '../core/services/auth.service';
 })
 export class ReimbursementListContainer {
     authService: AuthService = inject(AuthService);
+    private readonly router = inject(Router)
 
     selectedReimbursement: Reimbursement | null = null;
     startedEdit: boolean = false;
 
     handleSelectReimbursement(reimbursement: Reimbursement) {
         this.selectedReimbursement = reimbursement;
+    }
+
+    // logout method
+    onLogout(): void {
+        this.authService.logout();
+        this.router.navigateByUrl('/login'); 
+
     }
 }

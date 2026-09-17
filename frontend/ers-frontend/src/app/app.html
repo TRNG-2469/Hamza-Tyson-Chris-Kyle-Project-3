@@ -1,12 +1,1 @@
-<!-- for testing purposes to see if logout works -->
-@if (authService.isAuthenticated()) {
-  <div class="app-header">
-    <span class="app-logo">ERS System</span>
-    <span class="app-user">Hello, {{ authService.username() }}</span>
-    @if (authService.currentRole() === 'MANAGER') {
-      <a class="logout-btn" routerLink="/manager/reimbursements">Manage Reimbursements</a>
-    }
-    <button class="logout-btn" (click)="onLogout()">Logout</button>
-  </div>
-}
 <router-outlet></router-outlet>
