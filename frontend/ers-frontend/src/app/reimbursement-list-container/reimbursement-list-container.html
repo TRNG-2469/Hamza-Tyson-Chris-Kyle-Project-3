@@ -5,7 +5,7 @@
   @if(authService.currentRole() == "MANAGER") {
     <button class="logout-btn" id="manage-re-button">Manage Reimbursements</button>
   }
-  <button class="logout-btn" id="logoutButton">Log Out</button>
+  <button class="logout-btn" id="logoutButton" (click)="onLogout()">Log Out</button>
 </div>
 
 <div class="reimbursement-layout">
