@@ -28,8 +28,6 @@ export class ReimbursementEdit {
 
   @Output()
   isEditing: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output()
-  reimbursementChanged: EventEmitter<Reimbursement> = new EventEmitter<Reimbursement>();
 
   protected readonly form = this.formBuilder.nonNullable.group({
     amount: [0, Validators.required],
@@ -60,7 +58,6 @@ export class ReimbursementEdit {
         console.log('Reimbursement update successfully:', response);
 
         this.isEditing.emit(false);
-        this.reimbursementChanged.emit(this.selectedReimbursement!);
       }
     });
   }
