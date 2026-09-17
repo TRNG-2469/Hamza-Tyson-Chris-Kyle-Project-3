@@ -29,7 +29,7 @@ export class ReimbursementEdit {
   @Output()
   editStarted: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  protected readonly form = this.formBuilder.group({
+  protected readonly form = this.formBuilder.nonNullable.group({
     amount: [0, Validators.required],
     description: ['', Validators.required],
     type: ['', Validators.required],
@@ -45,9 +45,12 @@ export class ReimbursementEdit {
 
     const raw = this.form.getRawValue();
     const request: Reimbursement = {
+      id: 0,
       amount: raw.amount,
       description: raw.description,
       type: raw.type,
+      status: 'PENDING',
+      authorId: 0,
     };
   }
 

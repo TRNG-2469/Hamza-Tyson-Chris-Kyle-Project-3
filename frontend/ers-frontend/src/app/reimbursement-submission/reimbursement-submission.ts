@@ -16,7 +16,7 @@ export class ReimbursementSubmission {
 
   protected readonly errorMessage: WritableSignal<string | null> = signal<string | null>(null);
 
-  protected readonly form = this.formBuilder.group({
+  protected readonly form = this.formBuilder.nonNullable.group({
     amount: [0, Validators.required],
     description: ['', Validators.required],
     type: ['', Validators.required],
@@ -32,9 +32,12 @@ export class ReimbursementSubmission {
 
     const raw = this.form.getRawValue();
     const request: Reimbursement = {
+      id: 0,
       amount: raw.amount,
       description: raw.description,
       type: raw.type,
+      status: "PENDING",
+      authorId: 0
     }
 
   }
