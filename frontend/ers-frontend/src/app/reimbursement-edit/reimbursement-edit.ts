@@ -27,7 +27,7 @@ export class ReimbursementEdit {
   @Input() selectedReimbursement: Reimbursement | null = null;
 
   @Output()
-  editStarted: EventEmitter<boolean> = new EventEmitter<boolean>();
+  isEditing: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   protected readonly form = this.formBuilder.nonNullable.group({
     amount: [0, Validators.required],
@@ -45,16 +45,18 @@ export class ReimbursementEdit {
 
     const raw = this.form.getRawValue();
     const request: Reimbursement = {
-      id: 0,
+      reimbursementId: 0,
       amount: raw.amount,
       description: raw.description,
       type: raw.type,
       status: 'PENDING',
       authorId: 0,
     };
+
+    this.isEditing.emit(false);
   }
 
   cancelEdits() {
-    this.editStarted.emit(false);
+    this.isEditing.emit(false);
   }
 }

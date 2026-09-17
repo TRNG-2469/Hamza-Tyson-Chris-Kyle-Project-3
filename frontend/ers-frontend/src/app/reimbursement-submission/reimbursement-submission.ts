@@ -1,4 +1,12 @@
-import { Component, inject, Input, signal, WritableSignal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { Reimbursement } from '../reimbursement';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RegisterRequest } from '../core/models/register-request.model';
@@ -11,6 +19,9 @@ import { ReimbursementService } from '../reimbursement-service';
   templateUrl: './reimbursement-submission.html',
 })
 export class ReimbursementSubmission {
+  @Output()
+  isSubmitting:EventEmitter<boolean> = new EventEmitter();
+
   private readonly formBuilder: FormBuilder = inject(FormBuilder);
   private readonly reimbursementService: ReimbursementService = inject(ReimbursementService);
 
@@ -32,12 +43,14 @@ export class ReimbursementSubmission {
 
     const raw = this.form.getRawValue();
     const request: Reimbursement = {
-      id: 0,
+      reimbursementId: 0,
       amount: raw.amount,
       description: raw.description,
       type: raw.type,
       status: 'PENDING',
       authorId: 0,
     };
+
+    this.isSubmitting.emit(false);
   }
 }

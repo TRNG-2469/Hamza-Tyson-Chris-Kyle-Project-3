@@ -1,7 +1,7 @@
 <div class="header">
   <h1>Expense Reimbursement System</h1>
-  <button class="logout-btn" id="list-re-button">My Reimbursements</button>
-  <button class="logout-btn" id="submit-re-button">Submit Reimbursements</button>
+  <button class="logout-btn" id="list-re-button" (click)="endSubmit()">My Reimbursements</button>
+  <button class="logout-btn" id="submit-re-button" (click)="startSubmit()">Submit Reimbursements</button>
   @if(authService.currentRole() == "MANAGER") {
     <button class="logout-btn" id="manage-re-button" routerLink="/manager/reimbursements">Manage Reimbursements</button>
   }
@@ -9,11 +9,15 @@
 </div>
 
 <div class="reimbursement-layout">
-  <app-reimbursement-list class="reimbursement-list" (reimbursementSelected)="handleSelectReimbursement($event)"></app-reimbursement-list>
-
-  @if(startedEdit){
-    <app-reimbursement-edit [selectedReimbursement]="selectedReimbursement"></app-reimbursement-edit>
+  @if(isSubmitting) {
+    <app-reimbursement-submission></app-reimbursement-submission>
   } @else {
-    <app-reimbursement-details-panel class="reimbursement-details" [selectedReimbursement]="selectedReimbursement"></app-reimbursement-details-panel>
+    <app-reimbursement-list class="reimbursement-list" (reimbursementSelected)="handleSelectReimbursement($event)"></app-reimbursement-list>
+
+    @if(isEditing){
+    <app-reimbursement-edit (isEditing)="checkEdit($event)" [selectedReimbursement]="selectedReimbursement"></app-reimbursement-edit>
+    } @else {
+    <app-reimbursement-details-panel (isEditing)="checkEdit($event)" class="reimbursement-details" [selectedReimbursement]="selectedReimbursement"></app-reimbursement-details-panel>
+    }
   }
 </div>

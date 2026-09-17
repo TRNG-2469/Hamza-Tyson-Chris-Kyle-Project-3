@@ -5,7 +5,7 @@
   }
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-field">ID: </div>
+    <div class="form-field">ID: {{ selectedReimbursement!.reimbursementId }}</div>
 
     <div class="form-field">
       <label for="amount">Amount:</label>
@@ -37,7 +37,7 @@
       }
     </div>
 
-    <div class="form-field">Status: </div>
+    <div class="form-field">Status: {{ selectedReimbursement!.status }}</div>
 
     <button type="submit" id="submit">Submit</button>
     <button type="button" id="cancel" (click)="cancelEdits()">Cancel</button>

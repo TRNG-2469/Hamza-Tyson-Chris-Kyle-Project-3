@@ -11,9 +11,9 @@ export class ReimbursementDetailsPanel {
   @Input() selectedReimbursement: Reimbursement | null = null;
 
   @Output()
-  editStarted: EventEmitter<boolean> = new EventEmitter<boolean>();
+  isEditing: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   startEdit() {
-    this.editStarted.emit(true);
+    this.isEditing.emit(true);
   }
 }
