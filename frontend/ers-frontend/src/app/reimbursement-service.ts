@@ -44,4 +44,10 @@ export class ReimbursementService {
 
     return this.http.patch<Reimbursement>(url, { ...reimbursement, status });
   }
+
+  submitReimbursement(reimbursement: Reimbursement): Observable<Reimbursement> {
+    const url = `${this.baseUrl}/reimbursements`;
+
+    return this.http.post<Reimbursement>(url, reimbursement);
+  }
 }
