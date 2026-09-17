@@ -26,16 +26,32 @@ export class ManagerReimbursementList {
   @Output() reimbursementSelected = new EventEmitter<Reimbursement>();
   @ViewChild(MatSort) sort!: MatSort;
 
-  private readonly reimbursements: Reimbursement[];
+  private reimbursements: Reimbursement[] = [];
   readonly dataSource: MatTableDataSource<Reimbursement>;
-  selectedDepartment = '';
   selectedReimbursement: Reimbursement | null = null;
+  readonly statuses: Reimbursement['status'][] = ['pending', 'approved', 'denied'];
+  selectedStatus: Reimbursement['status'] | '' = '';
 
-  displayedColumns = ['id', 'title', 'amount', 'status'];
+  displayedColumns = ['reimbursementId', 'description', 'amount', 'type', 'status'];
 
   constructor(private readonly service: ReimbursementService) {
-    this.reimbursements = this.service.getDummyReimbursements();
-    this.dataSource = new MatTableDataSource(this.reimbursements);
+    this.dataSource = new MatTableDataSource<Reimbursement>([]);
+  }
+
+  ngOnInit() {
+    this.refresh();
+  }
+
+  refresh() {
+    this.service.getAllReimbursements().subscribe({
+      next: (reimbursements) => {
+        this.reimbursements = reimbursements;
+        this.applyStatusFilter();
+      },
+      error: (error) => {
+        console.error('Manager reimbursements API error:', error);
+      },
+    });
   }
 
   ngAfterViewInit() {
@@ -45,5 +61,18 @@ export class ManagerReimbursementList {
   selectReimbursement(reimbursement: Reimbursement) {
     this.selectedReimbursement = reimbursement;
     this.reimbursementSelected.emit(reimbursement);
+  }
+
+  filterByStatus(event: MatSelectChange) {
+    this.selectedStatus = event.value as Reimbursement['status'] | '';
+    this.applyStatusFilter();
+  }
+
+  private applyStatusFilter() {
+    this.dataSource.data = this.selectedStatus
+      ? this.reimbursements.filter((reimbursement) =>
+          reimbursement.status.toLowerCase() === this.selectedStatus,
+        )
+      : this.reimbursements;
   }
 }

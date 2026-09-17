@@ -1,18 +1,16 @@
 <div>
   <h2>Reimbursement Details</h2>
   @if (selectedReimbursement) {
-    <p>ID: {{ selectedReimbursement.id }}</p>
-    <p>Author: {{ selectedReimbursement.authorUsername ?? selectedReimbursement.authorName }}</p>
-    <p>Department: {{ selectedReimbursement.authorDepartment ?? 'Unknown' }}</p>
+    <p>ID: {{ selectedReimbursement.reimbursementId }}</p>
     <p>Amount: {{ selectedReimbursement.amount }}</p>
     <p>Description: {{ selectedReimbursement.description }}</p>
     <p>Status: {{ selectedReimbursement.status }}</p>
 
     @if (isAuthor) {
       <p>You cannot approve or deny your own reimbursement.</p>
-    } @else {
-      <button type="button" (click)="updateStatus('approved')">Approve</button>
-      <button type="button" (click)="updateStatus('denied')">Deny</button>
+    } @else if (selectedReimbursement.status.toLowerCase() === 'pending') {
+      <button type="button" (click)="updateStatus('APPROVED')">Approve</button>
+      <button type="button" (click)="updateStatus('DENIED')">Deny</button>
     }
   } @else {
     <p>No reimbursement selected.</p>
