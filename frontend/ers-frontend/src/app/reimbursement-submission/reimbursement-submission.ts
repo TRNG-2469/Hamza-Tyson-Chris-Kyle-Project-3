@@ -12,7 +12,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RegisterRequest } from '../core/models/register-request.model';
 import { ReimbursementService } from '../reimbursement-service';
 import { AuthService } from '../core/services/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -26,7 +25,6 @@ export class ReimbursementSubmission {
 
   private readonly formBuilder: FormBuilder = inject(FormBuilder);
   private readonly reimbursementService: ReimbursementService = inject(ReimbursementService);
-  private readonly router = inject(Router);
 
   protected readonly errorMessage: WritableSignal<string | null> = signal<string | null>(null);
 
@@ -58,7 +56,6 @@ export class ReimbursementSubmission {
     this.reimbursementService.submitReimbursement(request).subscribe({
       next: (response) => {
         console.log('Reimbursement submitted successfully:', response);
-        // this.router.navigate(['/reimbursements', this.authService.userId()]);
       }});
 
     this.isSubmitting.emit(false);
