@@ -2,8 +2,8 @@ export interface Reimbursement {
   reimbursementId: number;
   amount: number;
   description: string;
-  type: 'travel' | 'food' | 'lodging' | 'other';
-  status: 'pending' | 'approved' | 'denied';
+  type: string;
+  status: string;
   authorId: number;
   resolverId?: number;
 }

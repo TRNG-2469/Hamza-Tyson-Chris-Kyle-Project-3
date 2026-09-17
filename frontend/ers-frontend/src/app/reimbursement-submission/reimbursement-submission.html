@@ -1,12 +1,10 @@
 <div>
-  <h2>Reimbursement Details</h2>
+  <h2>Submit New Reimbursement</h2>
   @if (errorMessage()) {
     <p class="form-error">{{ errorMessage() }}</p>
   }
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-field">ID: {{ selectedReimbursement!.reimbursementId }}</div>
-
     <div class="form-field">
       <label for="amount">Amount:</label>
       <input type="number" id="amount" formControlName="amount" min="0" max="10000" step="0.01" required>
@@ -14,6 +12,7 @@
         <p class="form-error">Amount cannot be less than 0 or greater than 10000.</p>
       }
     </div>
+
 
     <div class="form-field">
       <label for="description">Description:</label>
@@ -37,9 +36,6 @@
       }
     </div>
 
-    <div class="form-field">Status: {{ selectedReimbursement!.status }}</div>
-
     <button type="submit" id="submit">Submit</button>
-    <button type="button" id="cancel" (click)="cancelEdits()">Cancel</button>
   </form>
 </div>

@@ -9,25 +9,23 @@ import {
 } from '@angular/core';
 import { Reimbursement } from '../reimbursement';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RegisterRequest } from '../core/models/register-request.model';
 import { ReimbursementService } from '../reimbursement-service';
 
 @Component({
   imports: [ReactiveFormsModule],
-  selector: 'app-reimbursement-edit',
-  styleUrl: './reimbursement-edit.css',
-  templateUrl: './reimbursement-edit.html',
-  standalone: true,
+  selector: 'app-reimbursement-submission',
+  styleUrl: './reimbursement-submission.css',
+  templateUrl: './reimbursement-submission.html',
 })
-export class ReimbursementEdit {
+export class ReimbursementSubmission {
+  @Output()
+  isSubmitting:EventEmitter<boolean> = new EventEmitter();
+
   private readonly formBuilder: FormBuilder = inject(FormBuilder);
   private readonly reimbursementService: ReimbursementService = inject(ReimbursementService);
 
   protected readonly errorMessage: WritableSignal<string | null> = signal<string | null>(null);
-
-  @Input() selectedReimbursement: Reimbursement | null = null;
-
-  @Output()
-  isEditing: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   protected readonly form = this.formBuilder.nonNullable.group({
     amount: [0, Validators.required],
@@ -35,7 +33,7 @@ export class ReimbursementEdit {
     type: ['', Validators.required],
   });
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -53,10 +51,6 @@ export class ReimbursementEdit {
       authorId: 0,
     };
 
-    this.isEditing.emit(false);
-  }
-
-  cancelEdits() {
-    this.isEditing.emit(false);
+    this.isSubmitting.emit(false);
   }
 }
