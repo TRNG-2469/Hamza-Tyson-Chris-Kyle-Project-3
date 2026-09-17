@@ -19,24 +19,22 @@ export class ReimbursementList {
 
     @Output() reimbursementSelected = new EventEmitter<Reimbursement>();
 
-    
     @ViewChild(MatSort) sort!: MatSort;
 
     dataSource: MatTableDataSource<Reimbursement>;
 
     displayedColumns = [
         'id',
-        'title',
+        'description',
         'amount',
-        'date',
         'status'
     ];
 
     selectedReimbursement: Reimbursement | null = null;
 
     constructor(private service: ReimbursementService) {
-        this.dataSource = new MatTableDataSource(
-        this.service.getDummyReimbursements()
+          this.dataSource = new MatTableDataSource(
+          this.service.getDummyReimbursements()
         );
     }
 
