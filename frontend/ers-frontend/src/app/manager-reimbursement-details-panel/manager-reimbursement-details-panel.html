@@ -8,7 +8,7 @@
 
     @if (isAuthor) {
       <p>You cannot approve or deny your own reimbursement.</p>
-    } @else {
+    } @else if (selectedReimbursement.status === 'pending') {
       <button type="button" (click)="updateStatus('APPROVED')">Approve</button>
       <button type="button" (click)="updateStatus('DENIED')">Deny</button>
     }
