@@ -3,7 +3,7 @@
     <property name="LOG_FILE_PATH" value="src/main/resources/logs" />
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
 
-    <!-- File Appender -->
+    <!-- File Appender-->
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>${LOG_FILE_PATH}/app.log</file>
         <append>true</append>
