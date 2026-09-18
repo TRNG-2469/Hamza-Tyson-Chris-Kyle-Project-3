@@ -39,6 +39,9 @@ export class ReimbursementListContainer {
 
   checkSubmit(data: boolean) {
     this.isSubmitting = data;
+    if(!data){
+      this.reimbursementList?.refresh();
+    }
   }
 
   startSubmit() {

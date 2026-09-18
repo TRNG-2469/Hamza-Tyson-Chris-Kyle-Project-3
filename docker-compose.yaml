@@ -1,2 +1,66 @@
+# Shared db variables
+x-db-config: &db-vars
+  POSTGRES_USER: user
+  POSTGRES_PASSWORD: password
+  POSTGRES_DB: iter4-db
+
+# 1. Define services that the application will use
 services:
-  $END$
+  database:
+    image: postgres:latest
+    container_name: iter4-postgres
+    environment:
+      <<: *db-vars
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d iter4-db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./ExpenseReimbursementSystemIteration2
+      dockerfile: Dockerfile
+    container_name: ers-backend
+    environment:
+      DB_URL: jdbc:postgresql://database:5432/iter4-postgres
+      DB_USER: user
+      DB_PASS: password
+      JWT_SECRET: 0d0e4ce6a7127330f235c0983ac87aec7c569b9676da7e9418128af5c06306f1
+    networks:
+      - backend-network
+      - frontend-network
+    depends_on:
+      database:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend/ers-frontend
+      dockerfile: Dockerfile
+    container_name: ers-frontend
+    ports:
+      - "80:80"
+    networks:
+      - frontend-network
+    depends_on:
+      - backend
+
+
+# 2. Define persistent volumes
+volumes:
+  db-data:
+    name: pg-production-data
+
+# 3. Define isolated virtual networks
+networks:
+  backend-network:
+    driver: bridge
+  frontend-network:
+    driver: bridge
